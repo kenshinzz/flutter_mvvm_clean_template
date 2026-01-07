@@ -112,4 +112,98 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get unknownError => 'เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ';
+
+  @override
+  String get theme => 'ธีม';
+
+  @override
+  String get themeLight => 'สว่าง';
+
+  @override
+  String get themeDark => 'มืด';
+
+  @override
+  String get themeSystem => 'ตามระบบ';
+
+  @override
+  String get language => 'ภาษา';
+
+  @override
+  String get languageEnglish => 'อังกฤษ';
+
+  @override
+  String get languageThai => 'ไทย';
+
+  @override
+  String get appearance => 'รูปลักษณ์';
+
+  @override
+  String get general => 'ทั่วไป';
+
+  @override
+  String get quickActions => 'การดำเนินการด่วน';
+
+  @override
+  String get toggleTheme => 'สลับธีม';
+
+  @override
+  String get toggleLanguage => 'สลับภาษา';
+
+  @override
+  String get resetToDefaults => 'รีเซ็ตเป็นค่าเริ่มต้น';
+
+  @override
+  String get currentTheme => 'ธีมปัจจุบัน';
+
+  @override
+  String get currentLanguage => 'ภาษาปัจจุบัน';
+
+  @override
+  String get splash => 'หน้าเริ่มต้น';
+
+  @override
+  String get counter => 'ตัวนับ';
+
+  @override
+  String get increment => 'เพิ่ม';
+
+  @override
+  String get decrement => 'ลด';
+
+  @override
+  String get reset => 'รีเซ็ต';
+
+  @override
+  String get menu => 'เมนู';
+
+  @override
+  String get about => 'เกี่ยวกับ';
+
+  @override
+  String get version => 'เวอร์ชัน';
+
+  @override
+  String get comingSoon => 'เร็วๆ นี้';
+
+  @override
+  String get pageNotFound => 'ไม่พบหน้านี้';
+
+  @override
+  String get goHome => 'กลับหน้าแรก';
+
+  @override
+  String get goBack => 'ย้อนกลับ';
+
+  @override
+  String get welcomeMessage =>
+      'ยินดีต้อนรับสู่ MVVM Clean Architecture Template';
+
+  @override
+  String get settingsDescription => 'ปรับแต่งประสบการณ์การใช้งานแอป';
+
+  @override
+  String get themeDescription => 'เลือกโหมดธีมที่คุณต้องการ';
+
+  @override
+  String get languageDescription => 'เลือกภาษาที่คุณต้องการ';
 }

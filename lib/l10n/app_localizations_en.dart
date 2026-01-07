@@ -112,4 +112,97 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get unknownError => 'Unknown error occurred';
+
+  @override
+  String get theme => 'Theme';
+
+  @override
+  String get themeLight => 'Light';
+
+  @override
+  String get themeDark => 'Dark';
+
+  @override
+  String get themeSystem => 'System';
+
+  @override
+  String get language => 'Language';
+
+  @override
+  String get languageEnglish => 'English';
+
+  @override
+  String get languageThai => 'Thai';
+
+  @override
+  String get appearance => 'Appearance';
+
+  @override
+  String get general => 'General';
+
+  @override
+  String get quickActions => 'Quick Actions';
+
+  @override
+  String get toggleTheme => 'Toggle Theme';
+
+  @override
+  String get toggleLanguage => 'Toggle Language';
+
+  @override
+  String get resetToDefaults => 'Reset to Defaults';
+
+  @override
+  String get currentTheme => 'Current Theme';
+
+  @override
+  String get currentLanguage => 'Current Language';
+
+  @override
+  String get splash => 'Splash';
+
+  @override
+  String get counter => 'Counter';
+
+  @override
+  String get increment => 'Increment';
+
+  @override
+  String get decrement => 'Decrement';
+
+  @override
+  String get reset => 'Reset';
+
+  @override
+  String get menu => 'Menu';
+
+  @override
+  String get about => 'About';
+
+  @override
+  String get version => 'Version';
+
+  @override
+  String get comingSoon => 'Coming Soon';
+
+  @override
+  String get pageNotFound => 'Page Not Found';
+
+  @override
+  String get goHome => 'Go Home';
+
+  @override
+  String get goBack => 'Go Back';
+
+  @override
+  String get welcomeMessage => 'Welcome to MVVM Clean Architecture Template';
+
+  @override
+  String get settingsDescription => 'Customize your app experience';
+
+  @override
+  String get themeDescription => 'Choose your preferred theme mode';
+
+  @override
+  String get languageDescription => 'Select your preferred language';
 }

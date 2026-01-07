@@ -139,5 +139,129 @@
   "unknownError": "เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ",
   "@unknownError": {
     "description": "Unknown error message"
+  },
+  "theme": "ธีม",
+  "@theme": {
+    "description": "Theme settings label"
+  },
+  "themeLight": "สว่าง",
+  "@themeLight": {
+    "description": "Light theme option"
+  },
+  "themeDark": "มืด",
+  "@themeDark": {
+    "description": "Dark theme option"
+  },
+  "themeSystem": "ตามระบบ",
+  "@themeSystem": {
+    "description": "System theme option"
+  },
+  "language": "ภาษา",
+  "@language": {
+    "description": "Language settings label"
+  },
+  "languageEnglish": "อังกฤษ",
+  "@languageEnglish": {
+    "description": "English language option"
+  },
+  "languageThai": "ไทย",
+  "@languageThai": {
+    "description": "Thai language option"
+  },
+  "appearance": "รูปลักษณ์",
+  "@appearance": {
+    "description": "Appearance settings section"
+  },
+  "general": "ทั่วไป",
+  "@general": {
+    "description": "General settings section"
+  },
+  "quickActions": "การดำเนินการด่วน",
+  "@quickActions": {
+    "description": "Quick actions section"
+  },
+  "toggleTheme": "สลับธีม",
+  "@toggleTheme": {
+    "description": "Toggle theme button text"
+  },
+  "toggleLanguage": "สลับภาษา",
+  "@toggleLanguage": {
+    "description": "Toggle language button text"
+  },
+  "resetToDefaults": "รีเซ็ตเป็นค่าเริ่มต้น",
+  "@resetToDefaults": {
+    "description": "Reset settings button text"
+  },
+  "currentTheme": "ธีมปัจจุบัน",
+  "@currentTheme": {
+    "description": "Current theme label"
+  },
+  "currentLanguage": "ภาษาปัจจุบัน",
+  "@currentLanguage": {
+    "description": "Current language label"
+  },
+  "splash": "หน้าเริ่มต้น",
+  "@splash": {
+    "description": "Splash screen title"
+  },
+  "counter": "ตัวนับ",
+  "@counter": {
+    "description": "Counter label"
+  },
+  "increment": "เพิ่ม",
+  "@increment": {
+    "description": "Increment button text"
+  },
+  "decrement": "ลด",
+  "@decrement": {
+    "description": "Decrement button text"
+  },
+  "reset": "รีเซ็ต",
+  "@reset": {
+    "description": "Reset button text"
+  },
+  "menu": "เมนู",
+  "@menu": {
+    "description": "Menu label"
+  },
+  "about": "เกี่ยวกับ",
+  "@about": {
+    "description": "About page title"
+  },
+  "version": "เวอร์ชัน",
+  "@version": {
+    "description": "Version label"
+  },
+  "comingSoon": "เร็วๆ นี้",
+  "@comingSoon": {
+    "description": "Coming soon message"
+  },
+  "pageNotFound": "ไม่พบหน้านี้",
+  "@pageNotFound": {
+    "description": "404 error page title"
+  },
+  "goHome": "กลับหน้าแรก",
+  "@goHome": {
+    "description": "Go to home button text"
+  },
+  "goBack": "ย้อนกลับ",
+  "@goBack": {
+    "description": "Go back button text"
+  },
+  "welcomeMessage": "ยินดีต้อนรับสู่ MVVM Clean Architecture Template",
+  "@welcomeMessage": {
+    "description": "Welcome message on home page"
+  },
+  "settingsDescription": "ปรับแต่งประสบการณ์การใช้งานแอป",
+  "@settingsDescription": {
+    "description": "Settings page description"
+  },
+  "themeDescription": "เลือกโหมดธีมที่คุณต้องการ",
+  "@themeDescription": {
+    "description": "Theme settings description"
+  },
+  "languageDescription": "เลือกภาษาที่คุณต้องการ",
+  "@languageDescription": {
+    "description": "Language settings description"
   }
 }

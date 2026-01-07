@@ -40,6 +40,9 @@ dependencies:
   # State Management
   provider: ^6.1.2
 
+  # Navigation
+  go_router: ^14.6.2
+
   # Network
   dio: ^5.7.0
   connectivity_plus: ^6.0.5

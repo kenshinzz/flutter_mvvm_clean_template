@@ -139,5 +139,129 @@
   "unknownError": "Unknown error occurred",
   "@unknownError": {
     "description": "Unknown error message"
+  },
+  "theme": "Theme",
+  "@theme": {
+    "description": "Theme settings label"
+  },
+  "themeLight": "Light",
+  "@themeLight": {
+    "description": "Light theme option"
+  },
+  "themeDark": "Dark",
+  "@themeDark": {
+    "description": "Dark theme option"
+  },
+  "themeSystem": "System",
+  "@themeSystem": {
+    "description": "System theme option"
+  },
+  "language": "Language",
+  "@language": {
+    "description": "Language settings label"
+  },
+  "languageEnglish": "English",
+  "@languageEnglish": {
+    "description": "English language option"
+  },
+  "languageThai": "Thai",
+  "@languageThai": {
+    "description": "Thai language option"
+  },
+  "appearance": "Appearance",
+  "@appearance": {
+    "description": "Appearance settings section"
+  },
+  "general": "General",
+  "@general": {
+    "description": "General settings section"
+  },
+  "quickActions": "Quick Actions",
+  "@quickActions": {
+    "description": "Quick actions section"
+  },
+  "toggleTheme": "Toggle Theme",
+  "@toggleTheme": {
+    "description": "Toggle theme button text"
+  },
+  "toggleLanguage": "Toggle Language",
+  "@toggleLanguage": {
+    "description": "Toggle language button text"
+  },
+  "resetToDefaults": "Reset to Defaults",
+  "@resetToDefaults": {
+    "description": "Reset settings button text"
+  },
+  "currentTheme": "Current Theme",
+  "@currentTheme": {
+    "description": "Current theme label"
+  },
+  "currentLanguage": "Current Language",
+  "@currentLanguage": {
+    "description": "Current language label"
+  },
+  "splash": "Splash",
+  "@splash": {
+    "description": "Splash screen title"
+  },
+  "counter": "Counter",
+  "@counter": {
+    "description": "Counter label"
+  },
+  "increment": "Increment",
+  "@increment": {
+    "description": "Increment button text"
+  },
+  "decrement": "Decrement",
+  "@decrement": {
+    "description": "Decrement button text"
+  },
+  "reset": "Reset",
+  "@reset": {
+    "description": "Reset button text"
+  },
+  "menu": "Menu",
+  "@menu": {
+    "description": "Menu label"
+  },
+  "about": "About",
+  "@about": {
+    "description": "About page title"
+  },
+  "version": "Version",
+  "@version": {
+    "description": "Version label"
+  },
+  "comingSoon": "Coming Soon",
+  "@comingSoon": {
+    "description": "Coming soon message"
+  },
+  "pageNotFound": "Page Not Found",
+  "@pageNotFound": {
+    "description": "404 error page title"
+  },
+  "goHome": "Go Home",
+  "@goHome": {
+    "description": "Go to home button text"
+  },
+  "goBack": "Go Back",
+  "@goBack": {
+    "description": "Go back button text"
+  },
+  "welcomeMessage": "Welcome to MVVM Clean Architecture Template",
+  "@welcomeMessage": {
+    "description": "Welcome message on home page"
+  },
+  "settingsDescription": "Customize your app experience",
+  "@settingsDescription": {
+    "description": "Settings page description"
+  },
+  "themeDescription": "Choose your preferred theme mode",
+  "@themeDescription": {
+    "description": "Theme settings description"
+  },
+  "languageDescription": "Select your preferred language",
+  "@languageDescription": {
+    "description": "Language settings description"
   }
 }

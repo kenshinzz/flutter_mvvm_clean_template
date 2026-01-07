@@ -307,6 +307,192 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unknown error occurred'**
   String get unknownError;
+
+  /// Theme settings label
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get theme;
+
+  /// Light theme option
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get themeLight;
+
+  /// Dark theme option
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get themeDark;
+
+  /// System theme option
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get themeSystem;
+
+  /// Language settings label
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
+  /// English language option
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get languageEnglish;
+
+  /// Thai language option
+  ///
+  /// In en, this message translates to:
+  /// **'Thai'**
+  String get languageThai;
+
+  /// Appearance settings section
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearance;
+
+  /// General settings section
+  ///
+  /// In en, this message translates to:
+  /// **'General'**
+  String get general;
+
+  /// Quick actions section
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Actions'**
+  String get quickActions;
+
+  /// Toggle theme button text
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle Theme'**
+  String get toggleTheme;
+
+  /// Toggle language button text
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle Language'**
+  String get toggleLanguage;
+
+  /// Reset settings button text
+  ///
+  /// In en, this message translates to:
+  /// **'Reset to Defaults'**
+  String get resetToDefaults;
+
+  /// Current theme label
+  ///
+  /// In en, this message translates to:
+  /// **'Current Theme'**
+  String get currentTheme;
+
+  /// Current language label
+  ///
+  /// In en, this message translates to:
+  /// **'Current Language'**
+  String get currentLanguage;
+
+  /// Splash screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Splash'**
+  String get splash;
+
+  /// Counter label
+  ///
+  /// In en, this message translates to:
+  /// **'Counter'**
+  String get counter;
+
+  /// Increment button text
+  ///
+  /// In en, this message translates to:
+  /// **'Increment'**
+  String get increment;
+
+  /// Decrement button text
+  ///
+  /// In en, this message translates to:
+  /// **'Decrement'**
+  String get decrement;
+
+  /// Reset button text
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get reset;
+
+  /// Menu label
+  ///
+  /// In en, this message translates to:
+  /// **'Menu'**
+  String get menu;
+
+  /// About page title
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get about;
+
+  /// Version label
+  ///
+  /// In en, this message translates to:
+  /// **'Version'**
+  String get version;
+
+  /// Coming soon message
+  ///
+  /// In en, this message translates to:
+  /// **'Coming Soon'**
+  String get comingSoon;
+
+  /// 404 error page title
+  ///
+  /// In en, this message translates to:
+  /// **'Page Not Found'**
+  String get pageNotFound;
+
+  /// Go to home button text
+  ///
+  /// In en, this message translates to:
+  /// **'Go Home'**
+  String get goHome;
+
+  /// Go back button text
+  ///
+  /// In en, this message translates to:
+  /// **'Go Back'**
+  String get goBack;
+
+  /// Welcome message on home page
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to MVVM Clean Architecture Template'**
+  String get welcomeMessage;
+
+  /// Settings page description
+  ///
+  /// In en, this message translates to:
+  /// **'Customize your app experience'**
+  String get settingsDescription;
+
+  /// Theme settings description
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your preferred theme mode'**
+  String get themeDescription;
+
+  /// Language settings description
+  ///
+  /// In en, this message translates to:
+  /// **'Select your preferred language'**
+  String get languageDescription;
 }
 
 class _AppLocalizationsDelegate
