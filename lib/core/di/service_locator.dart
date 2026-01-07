@@ -1,4 +1,4 @@
-import 'package:dio/dio.dart';
+import 'package:http/http.dart' as http;
 import 'package:get_it/get_it.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,31 +16,8 @@ Future<void> initializeDependencies() async {
 
   getIt.registerLazySingleton<Connectivity>(() => Connectivity());
 
-  // Dio instance
-  getIt.registerLazySingleton<Dio>(() {
-    final dio = Dio(
-      BaseOptions(
-        baseUrl: 'https://api.example.com', // Replace with your API base URL
-        connectTimeout: const Duration(seconds: 30),
-        receiveTimeout: const Duration(seconds: 30),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-      ),
-    );
-
-    // Add interceptors if needed
-    dio.interceptors.add(
-      LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        error: true,
-      ),
-    );
-
-    return dio;
-  });
+  // HTTP Client
+  getIt.registerLazySingleton<http.Client>(() => http.Client());
 
   // Core
   getIt.registerLazySingleton<NetworkInfo>(
@@ -48,7 +25,7 @@ Future<void> initializeDependencies() async {
   );
 
   getIt.registerLazySingleton<ApiClient>(
-    () => ApiClient(dio: getIt<Dio>()),
+    () => ApiClient(client: getIt<http.Client>()),
   );
 
   // Data Sources

@@ -89,7 +89,7 @@ context.replace(RouteNames.login);
 ### Service Locator (`lib/core/di/service_locator.dart`)
 
 Uses GetIt for **non-reactive** dependencies:
-- External services (Dio, SharedPreferences, Connectivity)
+- External services (http.Client, SharedPreferences, Connectivity)
 - Network utilities (ApiClient, NetworkInfo)
 - Repositories
 - Use cases

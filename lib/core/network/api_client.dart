@@ -1,164 +1,251 @@
-import 'package:dio/dio.dart';
+import 'dart:convert';
+import 'dart:async';
+import 'package:http/http.dart' as http;
 import 'package:mvvm_clean_template/core/constants/app_constants.dart';
 import 'package:mvvm_clean_template/core/errors/exceptions.dart';
 
+/// Response wrapper class to provide similar interface as before
+class ApiResponse {
+  final int statusCode;
+  final dynamic data;
+  final Map<String, String> headers;
+
+  ApiResponse({
+    required this.statusCode,
+    required this.data,
+    required this.headers,
+  });
+}
+
 class ApiClient {
-  late final Dio _dio;
+  final http.Client _client;
+  final String _baseUrl;
+  final Duration _timeout;
+  final Map<String, String> _defaultHeaders;
 
-  ApiClient({Dio? dio}) {
-    _dio = dio ?? Dio();
-    _configureDio();
-  }
-
-  void _configureDio() {
-    _dio.options = BaseOptions(
-      baseUrl: '${AppConstants.baseUrl}/${AppConstants.apiVersion}',
-      connectTimeout: const Duration(milliseconds: AppConstants.connectionTimeout),
-      receiveTimeout: const Duration(milliseconds: AppConstants.receiveTimeout),
-      headers: {
+  ApiClient({http.Client? client})
+    : _client = client ?? http.Client(),
+      _baseUrl = '${AppConstants.baseUrl}/${AppConstants.apiVersion}',
+      _timeout = Duration(milliseconds: AppConstants.connectionTimeout),
+      _defaultHeaders = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-      },
-    );
+      };
 
-    // Add interceptors
-    _dio.interceptors.add(
-      InterceptorsWrapper(
-        onRequest: (options, handler) {
-          // Add auth token if available
-          // final token = // Get token from storage
-          // if (token != null) {
-          //   options.headers['Authorization'] = 'Bearer $token';
-          // }
-          return handler.next(options);
-        },
-        onResponse: (response, handler) {
-          return handler.next(response);
-        },
-        onError: (error, handler) {
-          return handler.next(error);
-        },
-      ),
-    );
-
-    // Add logging interceptor in debug mode
-    _dio.interceptors.add(
-      LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        error: true,
-      ),
-    );
+  /// Set authorization token
+  void setAuthToken(String token) {
+    _defaultHeaders['Authorization'] = 'Bearer $token';
   }
 
-  Future<Response> get(
-    String path, {
-    Map<String, dynamic>? queryParameters,
-    Options? options,
-  }) async {
-    try {
-      final response = await _dio.get(
-        path,
-        queryParameters: queryParameters,
-        options: options,
+  /// Remove authorization token
+  void clearAuthToken() {
+    _defaultHeaders.remove('Authorization');
+  }
+
+  /// Update default headers
+  void updateHeaders(Map<String, String> headers) {
+    _defaultHeaders.addAll(headers);
+  }
+
+  /// Build full URL with query parameters
+  Uri _buildUri(String path, Map<String, dynamic>? queryParameters) {
+    final uri = Uri.parse('$_baseUrl$path');
+    if (queryParameters != null && queryParameters.isNotEmpty) {
+      return uri.replace(
+        queryParameters: queryParameters.map(
+          (key, value) => MapEntry(key, value.toString()),
+        ),
       );
-      return response;
-    } on DioException catch (e) {
-      throw _handleError(e);
+    }
+    return uri;
+  }
+
+  /// Merge headers
+  Map<String, String> _mergeHeaders(Map<String, String>? additionalHeaders) {
+    return {..._defaultHeaders, ...?additionalHeaders};
+  }
+
+  /// Parse response body
+  dynamic _parseResponseBody(http.Response response) {
+    if (response.body.isEmpty) {
+      return null;
+    }
+    try {
+      return json.decode(response.body);
+    } catch (_) {
+      return response.body;
     }
   }
 
-  Future<Response> post(
+  /// Handle response and check for errors
+  ApiResponse _handleResponse(http.Response response) {
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      return ApiResponse(
+        statusCode: response.statusCode,
+        data: _parseResponseBody(response),
+        headers: response.headers,
+      );
+    }
+    throw _handleStatusCode(response.statusCode);
+  }
+
+  /// GET request
+  Future<ApiResponse> get(
     String path, {
-    dynamic data,
     Map<String, dynamic>? queryParameters,
-    Options? options,
+    Map<String, String>? headers,
   }) async {
     try {
-      final response = await _dio.post(
-        path,
-        data: data,
-        queryParameters: queryParameters,
-        options: options,
-      );
-      return response;
-    } on DioException catch (e) {
-      throw _handleError(e);
+      final uri = _buildUri(path, queryParameters);
+      final response = await _client
+          .get(uri, headers: _mergeHeaders(headers))
+          .timeout(_timeout);
+      return _handleResponse(response);
+    } on TimeoutException {
+      throw NetworkException('Connection timeout');
+    } on http.ClientException catch (e) {
+      throw NetworkException('Network error: ${e.message}');
+    } on Exception catch (e) {
+      if (e is ServerException ||
+          e is NetworkException ||
+          e is ValidationException ||
+          e is AuthenticationException ||
+          e is AuthorizationException ||
+          e is NotFoundException) {
+        rethrow;
+      }
+      throw NetworkException('Network error occurred');
     }
   }
 
-  Future<Response> put(
-    String path, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
-    Options? options,
-  }) async {
-    try {
-      final response = await _dio.put(
-        path,
-        data: data,
-        queryParameters: queryParameters,
-        options: options,
-      );
-      return response;
-    } on DioException catch (e) {
-      throw _handleError(e);
-    }
-  }
-
-  Future<Response> patch(
-    String path, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
-    Options? options,
-  }) async {
-    try {
-      final response = await _dio.patch(
-        path,
-        data: data,
-        queryParameters: queryParameters,
-        options: options,
-      );
-      return response;
-    } on DioException catch (e) {
-      throw _handleError(e);
-    }
-  }
-
-  Future<Response> delete(
+  /// POST request
+  Future<ApiResponse> post(
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
-    Options? options,
+    Map<String, String>? headers,
   }) async {
     try {
-      final response = await _dio.delete(
-        path,
-        data: data,
-        queryParameters: queryParameters,
-        options: options,
-      );
-      return response;
-    } on DioException catch (e) {
-      throw _handleError(e);
+      final uri = _buildUri(path, queryParameters);
+      final body = data != null ? json.encode(data) : null;
+      final response = await _client
+          .post(uri, headers: _mergeHeaders(headers), body: body)
+          .timeout(_timeout);
+      return _handleResponse(response);
+    } on TimeoutException {
+      throw NetworkException('Connection timeout');
+    } on http.ClientException catch (e) {
+      throw NetworkException('Network error: ${e.message}');
+    } on Exception catch (e) {
+      if (e is ServerException ||
+          e is NetworkException ||
+          e is ValidationException ||
+          e is AuthenticationException ||
+          e is AuthorizationException ||
+          e is NotFoundException) {
+        rethrow;
+      }
+      throw NetworkException('Network error occurred');
     }
   }
 
-  Exception _handleError(DioException error) {
-    switch (error.type) {
-      case DioExceptionType.connectionTimeout:
-      case DioExceptionType.sendTimeout:
-      case DioExceptionType.receiveTimeout:
-        return NetworkException('Connection timeout');
-      case DioExceptionType.badResponse:
-        return _handleStatusCode(error.response?.statusCode ?? 0);
-      case DioExceptionType.cancel:
-        return NetworkException('Request cancelled');
-      default:
-        return NetworkException('Network error occurred');
+  /// PUT request
+  Future<ApiResponse> put(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Map<String, String>? headers,
+  }) async {
+    try {
+      final uri = _buildUri(path, queryParameters);
+      final body = data != null ? json.encode(data) : null;
+      final response = await _client
+          .put(uri, headers: _mergeHeaders(headers), body: body)
+          .timeout(_timeout);
+      return _handleResponse(response);
+    } on TimeoutException {
+      throw NetworkException('Connection timeout');
+    } on http.ClientException catch (e) {
+      throw NetworkException('Network error: ${e.message}');
+    } on Exception catch (e) {
+      if (e is ServerException ||
+          e is NetworkException ||
+          e is ValidationException ||
+          e is AuthenticationException ||
+          e is AuthorizationException ||
+          e is NotFoundException) {
+        rethrow;
+      }
+      throw NetworkException('Network error occurred');
     }
   }
 
+  /// PATCH request
+  Future<ApiResponse> patch(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Map<String, String>? headers,
+  }) async {
+    try {
+      final uri = _buildUri(path, queryParameters);
+      final body = data != null ? json.encode(data) : null;
+      final response = await _client
+          .patch(uri, headers: _mergeHeaders(headers), body: body)
+          .timeout(_timeout);
+      return _handleResponse(response);
+    } on TimeoutException {
+      throw NetworkException('Connection timeout');
+    } on http.ClientException catch (e) {
+      throw NetworkException('Network error: ${e.message}');
+    } on Exception catch (e) {
+      if (e is ServerException ||
+          e is NetworkException ||
+          e is ValidationException ||
+          e is AuthenticationException ||
+          e is AuthorizationException ||
+          e is NotFoundException) {
+        rethrow;
+      }
+      throw NetworkException('Network error occurred');
+    }
+  }
+
+  /// DELETE request
+  Future<ApiResponse> delete(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Map<String, String>? headers,
+  }) async {
+    try {
+      final uri = _buildUri(path, queryParameters);
+      final response = await _client
+          .delete(
+            uri,
+            headers: _mergeHeaders(headers),
+            body: data != null ? json.encode(data) : null,
+          )
+          .timeout(_timeout);
+      return _handleResponse(response);
+    } on TimeoutException {
+      throw NetworkException('Connection timeout');
+    } on http.ClientException catch (e) {
+      throw NetworkException('Network error: ${e.message}');
+    } on Exception catch (e) {
+      if (e is ServerException ||
+          e is NetworkException ||
+          e is ValidationException ||
+          e is AuthenticationException ||
+          e is AuthorizationException ||
+          e is NotFoundException) {
+        rethrow;
+      }
+      throw NetworkException('Network error occurred');
+    }
+  }
+
+  /// Handle HTTP status codes
   Exception _handleStatusCode(int statusCode) {
     switch (statusCode) {
       case 400:
@@ -176,5 +263,10 @@ class ApiClient {
       default:
         return ServerException('Server error with status code: $statusCode');
     }
+  }
+
+  /// Close the client when done
+  void dispose() {
+    _client.close();
   }
 }

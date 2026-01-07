@@ -28,7 +28,7 @@ Your MVVM Clean Architecture Flutter project has been successfully set up at:
 - **Easy to Extend** - Add more languages by creating new ARB files
 
 #### 4. Core Utilities
-- **API Client** - Pre-configured Dio HTTP client
+- **API Client** - Pre-configured HTTP client with error handling
 - **Network Info** - Internet connectivity checking
 - **Validators** - Email, password, phone, and custom validators
 - **Logger** - Debug and production logging
@@ -126,7 +126,7 @@ Create `lib/core/di/injection_container.dart` as shown in PROJECT_GUIDE.md
 - provider: ^6.1.2
 
 **Network:**
-- dio: ^5.7.0
+- http: ^1.6.0
 - connectivity_plus: ^6.0.5
 
 **Storage:**

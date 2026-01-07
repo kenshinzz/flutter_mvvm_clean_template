@@ -680,7 +680,7 @@ Create a service locator to manage dependencies.
 
 ```dart
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:dio/dio.dart';
+import 'package:http/http.dart' as http;
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mvvm_clean_template/core/network/api_client.dart';
@@ -698,11 +698,11 @@ Future<void> setupDependencies() async {
   // External
   final sharedPreferences = await SharedPreferences.getInstance();
   getIt.registerLazySingleton(() => sharedPreferences);
-  getIt.registerLazySingleton(() => Dio());
+  getIt.registerLazySingleton(() => http.Client());
   getIt.registerLazySingleton(() => Connectivity());
 
   // Core
-  getIt.registerLazySingleton<ApiClient>(() => ApiClient(dio: getIt()));
+  getIt.registerLazySingleton<ApiClient>(() => ApiClient(client: getIt()));
   getIt.registerLazySingleton<NetworkInfo>(
     () => NetworkInfoImpl(getIt()),
   );

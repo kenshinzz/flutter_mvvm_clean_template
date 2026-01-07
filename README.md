@@ -13,7 +13,7 @@ lib/
 │   │   ├── exceptions.dart             # Exception classes
 │   │   └── failures.dart               # Failure classes for error handling
 │   ├── network/
-│   │   ├── api_client.dart             # Dio-based API client
+│   │   ├── api_client.dart             # HTTP-based API client
 │   │   └── network_info.dart           # Network connectivity checker
 │   ├── theme/
 │   │   ├── app_colors.dart             # Color palette
@@ -78,7 +78,7 @@ This project follows **MVVM Clean Architecture** principles with three main laye
 - Flutter's official l10n approach
 
 ### Core Utilities
-- **API Client**: Pre-configured Dio client with interceptors
+- **API Client**: Pre-configured HTTP client with error handling
 - **Network Info**: Connectivity checking
 - **Validators**: Common input validation (email, password, phone, etc.)
 - **Logger**: Debug and production logging
@@ -127,7 +127,7 @@ Follow Clean Architecture principles when adding features. See the detailed exam
 - `provider` - State management solution
 
 ### Network
-- `dio` - HTTP client
+- `http` - HTTP client
 - `connectivity_plus` - Network connectivity
 
 ### Storage
