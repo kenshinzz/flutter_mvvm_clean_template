@@ -123,6 +123,9 @@ ios/Runner/GoogleService-Info.plist
 *.freezed.dart
 *.mocks.dart
 
+# Golden test failures (but keep the actual goldens)
+**/failures/
+
 # Localization generated (optional - uncomment if you don't want to track)
 # lib/l10n/app_localizations*.dart
 

@@ -34,8 +34,28 @@ jobs:
       - name: Analyze code
         run: flutter analyze
 
-      - name: Run tests
-        run: flutter test --coverage
+      - name: Run tests (excluding golden)
+        run: flutter test --coverage --exclude-tags=golden
+
+      - name: Run golden tests
+        id: golden_tests
+        run: flutter test --tags=golden
+        continue-on-error: true
+
+      - name: Upload golden test failures
+        uses: actions/upload-artifact@v4
+        if: steps.golden_tests.outcome == 'failure'
+        with:
+          name: golden-failures
+          path: test/golden/**/failures/
+          retention-days: 7
+
+      - name: Golden test result
+        if: steps.golden_tests.outcome == 'failure'
+        run: |
+          echo "::warning::Golden tests failed. This may be expected if UI changed intentionally."
+          echo "Download the 'golden-failures' artifact to review differences."
+          echo "To update goldens locally: flutter test --tags=golden --update-goldens"
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4

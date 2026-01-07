@@ -1,0 +1,9 @@
+# Dart test configuration
+# See https://pub.dev/packages/test for more information
+
+tags:
+  golden:
+    # Tests that use snapshot/golden image comparison
+    # Run with: flutter test --tags=golden
+    # Update goldens: flutter test --tags=golden --update-goldens
+

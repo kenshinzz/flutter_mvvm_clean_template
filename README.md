@@ -145,6 +145,7 @@ Follow Clean Architecture principles when adding features. See the detailed exam
 ### Testing
 - `mockito` - Mocking framework
 - `build_runner` - Code generation for mocks
+- `alchemist` - Snapshot/Golden testing
 
 ## Testing
 
@@ -169,19 +170,40 @@ When adding new mock annotations, regenerate mocks with:
 dart run build_runner build --delete-conflicting-outputs
 ```
 
+### Golden/Snapshot Tests
+
+```bash
+# Generate/update golden images
+flutter test --update-goldens --tags=golden
+
+# Run golden tests
+flutter test --tags=golden
+
+# Run all tests except golden tests
+flutter test --exclude-tags=golden
+```
+
 ### Test Structure
 
 ```
 test/
 ├── core/
 │   └── network/
-│       └── api_client_test.dart      # API client tests
+│       └── api_client_test.dart        # API client tests
 ├── presentation/
 │   └── viewmodels/
-│       └── settings_viewmodel_test.dart  # ViewModel tests
+│       └── settings_viewmodel_test.dart # ViewModel tests
+├── golden/
+│   ├── pages/
+│   │   ├── home_page_golden_test.dart   # Page golden tests
+│   │   └── settings_page_golden_test.dart
+│   └── widgets/
+│       ├── button_golden_test.dart      # Widget golden tests
+│       └── card_golden_test.dart
 ├── helpers/
-│   └── test_helpers.dart             # Test utilities
-└── widget_test.dart                  # Widget tests
+│   └── test_helpers.dart               # Test utilities
+├── flutter_test_config.dart            # Alchemist config
+└── widget_test.dart                    # Widget tests
 ```
 
 ## CI/CD
