@@ -1,0 +1,143 @@
+{
+  "@@locale": "th",
+  "appTitle": "MVVM Clean Template",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "welcome": "ยินดีต้อนรับ",
+  "@welcome": {
+    "description": "Welcome message"
+  },
+  "hello": "สวัสดี",
+  "@hello": {
+    "description": "Greeting message"
+  },
+  "goodbye": "ลาก่อน",
+  "@goodbye": {
+    "description": "Farewell message"
+  },
+  "yes": "ใช่",
+  "@yes": {
+    "description": "Confirmation text"
+  },
+  "no": "ไม่",
+  "@no": {
+    "description": "Rejection text"
+  },
+  "ok": "ตกลง",
+  "@ok": {
+    "description": "OK button text"
+  },
+  "cancel": "ยกเลิก",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
+  "save": "บันทึก",
+  "@save": {
+    "description": "Save button text"
+  },
+  "delete": "ลบ",
+  "@delete": {
+    "description": "Delete button text"
+  },
+  "edit": "แก้ไข",
+  "@edit": {
+    "description": "Edit button text"
+  },
+  "search": "ค้นหา",
+  "@search": {
+    "description": "Search button text"
+  },
+  "loading": "กำลังโหลด...",
+  "@loading": {
+    "description": "Loading indicator text"
+  },
+  "error": "ข้อผิดพลาด",
+  "@error": {
+    "description": "Error message title"
+  },
+  "success": "สำเร็จ",
+  "@success": {
+    "description": "Success message title"
+  },
+  "noDataAvailable": "ไม่มีข้อมูล",
+  "@noDataAvailable": {
+    "description": "Message when no data is available"
+  },
+  "retry": "ลองอีกครั้ง",
+  "@retry": {
+    "description": "Retry button text"
+  },
+  "submit": "ส่ง",
+  "@submit": {
+    "description": "Submit button text"
+  },
+  "settings": "ตั้งค่า",
+  "@settings": {
+    "description": "Settings page title"
+  },
+  "profile": "โปรไฟล์",
+  "@profile": {
+    "description": "Profile page title"
+  },
+  "home": "หน้าแรก",
+  "@home": {
+    "description": "Home page title"
+  },
+  "logout": "ออกจากระบบ",
+  "@logout": {
+    "description": "Logout button text"
+  },
+  "login": "เข้าสู่ระบบ",
+  "@login": {
+    "description": "Login button text"
+  },
+  "register": "ลงทะเบียน",
+  "@register": {
+    "description": "Register button text"
+  },
+  "email": "อีเมล",
+  "@email": {
+    "description": "Email field label"
+  },
+  "password": "รหัสผ่าน",
+  "@password": {
+    "description": "Password field label"
+  },
+  "confirmPassword": "ยืนยันรหัสผ่าน",
+  "@confirmPassword": {
+    "description": "Confirm password field label"
+  },
+  "forgotPassword": "ลืมรหัสผ่าน?",
+  "@forgotPassword": {
+    "description": "Forgot password link text"
+  },
+  "invalidEmail": "อีเมลไม่ถูกต้อง",
+  "@invalidEmail": {
+    "description": "Invalid email error message"
+  },
+  "invalidPassword": "รหัสผ่านไม่ถูกต้อง",
+  "@invalidPassword": {
+    "description": "Invalid password error message"
+  },
+  "passwordMismatch": "รหัสผ่านไม่ตรงกัน",
+  "@passwordMismatch": {
+    "description": "Password mismatch error message"
+  },
+  "requiredField": "กรุณากรอกข้อมูล",
+  "@requiredField": {
+    "description": "Required field error message"
+  },
+  "networkError": "เกิดข้อผิดพลาดทางเครือข่าย",
+  "@networkError": {
+    "description": "Network error message"
+  },
+  "serverError": "เกิดข้อผิดพลาดจากเซิร์ฟเวอร์",
+  "@serverError": {
+    "description": "Server error message"
+  },
+  "unknownError": "เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ",
+  "@unknownError": {
+    "description": "Unknown error message"
+  }
+}

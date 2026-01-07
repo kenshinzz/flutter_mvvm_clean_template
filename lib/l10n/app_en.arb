@@ -1,0 +1,143 @@
+{
+  "@@locale": "en",
+  "appTitle": "MVVM Clean Template",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "welcome": "Welcome",
+  "@welcome": {
+    "description": "Welcome message"
+  },
+  "hello": "Hello",
+  "@hello": {
+    "description": "Greeting message"
+  },
+  "goodbye": "Goodbye",
+  "@goodbye": {
+    "description": "Farewell message"
+  },
+  "yes": "Yes",
+  "@yes": {
+    "description": "Confirmation text"
+  },
+  "no": "No",
+  "@no": {
+    "description": "Rejection text"
+  },
+  "ok": "OK",
+  "@ok": {
+    "description": "OK button text"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
+  "save": "Save",
+  "@save": {
+    "description": "Save button text"
+  },
+  "delete": "Delete",
+  "@delete": {
+    "description": "Delete button text"
+  },
+  "edit": "Edit",
+  "@edit": {
+    "description": "Edit button text"
+  },
+  "search": "Search",
+  "@search": {
+    "description": "Search button text"
+  },
+  "loading": "Loading...",
+  "@loading": {
+    "description": "Loading indicator text"
+  },
+  "error": "Error",
+  "@error": {
+    "description": "Error message title"
+  },
+  "success": "Success",
+  "@success": {
+    "description": "Success message title"
+  },
+  "noDataAvailable": "No data available",
+  "@noDataAvailable": {
+    "description": "Message when no data is available"
+  },
+  "retry": "Retry",
+  "@retry": {
+    "description": "Retry button text"
+  },
+  "submit": "Submit",
+  "@submit": {
+    "description": "Submit button text"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings page title"
+  },
+  "profile": "Profile",
+  "@profile": {
+    "description": "Profile page title"
+  },
+  "home": "Home",
+  "@home": {
+    "description": "Home page title"
+  },
+  "logout": "Logout",
+  "@logout": {
+    "description": "Logout button text"
+  },
+  "login": "Login",
+  "@login": {
+    "description": "Login button text"
+  },
+  "register": "Register",
+  "@register": {
+    "description": "Register button text"
+  },
+  "email": "Email",
+  "@email": {
+    "description": "Email field label"
+  },
+  "password": "Password",
+  "@password": {
+    "description": "Password field label"
+  },
+  "confirmPassword": "Confirm Password",
+  "@confirmPassword": {
+    "description": "Confirm password field label"
+  },
+  "forgotPassword": "Forgot Password?",
+  "@forgotPassword": {
+    "description": "Forgot password link text"
+  },
+  "invalidEmail": "Invalid email address",
+  "@invalidEmail": {
+    "description": "Invalid email error message"
+  },
+  "invalidPassword": "Invalid password",
+  "@invalidPassword": {
+    "description": "Invalid password error message"
+  },
+  "passwordMismatch": "Passwords do not match",
+  "@passwordMismatch": {
+    "description": "Password mismatch error message"
+  },
+  "requiredField": "This field is required",
+  "@requiredField": {
+    "description": "Required field error message"
+  },
+  "networkError": "Network error occurred",
+  "@networkError": {
+    "description": "Network error message"
+  },
+  "serverError": "Server error occurred",
+  "@serverError": {
+    "description": "Server error message"
+  },
+  "unknownError": "Unknown error occurred",
+  "@unknownError": {
+    "description": "Unknown error message"
+  }
+}
