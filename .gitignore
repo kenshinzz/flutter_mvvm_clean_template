@@ -131,6 +131,16 @@ ios/Runner/GoogleService-Info.plist
 */fastlane/Preview.html
 */fastlane/screenshots
 */fastlane/test_output
+*/fastlane/README.md
+*/fastlane/google-play-key.json
+*/fastlane/.env*
+ios/fastlane/metadata/
+android/fastlane/metadata/
+Gemfile.lock
+
+# Ruby
+.bundle/
+vendor/bundle/
 
 # Exceptions to above rules
 !**/ios/**/default.mode1v3

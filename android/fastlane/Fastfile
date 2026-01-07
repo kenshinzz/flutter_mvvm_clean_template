@@ -1,0 +1,158 @@
+# Fastfile for Android
+# https://docs.fastlane.tools
+
+default_platform(:android)
+
+platform :android do
+  # =====================
+  # Before All
+  # =====================
+  before_all do
+    # Ensure we're on a clean state
+    ensure_git_status_clean unless ENV["CI"]
+  end
+
+  # =====================
+  # Beta Lane - Deploy to Internal Testing
+  # =====================
+  desc "Deploy a new beta build to Play Store Internal Testing"
+  lane :beta do
+    # Build is already done by Flutter in CI
+    # Just upload the existing AAB
+    
+    aab_path = "../build/app/outputs/bundle/release/app-release.aab"
+    
+    unless File.exist?(aab_path)
+      UI.user_error!("AAB file not found at #{aab_path}. Please build Flutter first.")
+    end
+
+    upload_to_play_store(
+      track: "internal",
+      aab: aab_path,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      release_status: "draft",
+      json_key: "fastlane/google-play-key.json"
+    )
+  end
+
+  # =====================
+  # Alpha Lane - Deploy to Closed Testing
+  # =====================
+  desc "Deploy a new alpha build to Play Store Closed Testing"
+  lane :alpha do
+    aab_path = "../build/app/outputs/bundle/release/app-release.aab"
+    
+    unless File.exist?(aab_path)
+      UI.user_error!("AAB file not found at #{aab_path}. Please build Flutter first.")
+    end
+
+    upload_to_play_store(
+      track: "alpha",
+      aab: aab_path,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      release_status: "draft",
+      json_key: "fastlane/google-play-key.json"
+    )
+  end
+
+  # =====================
+  # Release Lane - Deploy to Production
+  # =====================
+  desc "Deploy a new release to Play Store Production"
+  lane :release do
+    aab_path = "../build/app/outputs/bundle/release/app-release.aab"
+    
+    unless File.exist?(aab_path)
+      UI.user_error!("AAB file not found at #{aab_path}. Please build Flutter first.")
+    end
+
+    upload_to_play_store(
+      track: "production",
+      aab: aab_path,
+      skip_upload_metadata: false,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      release_status: "draft",  # Change to "completed" for auto-publish
+      json_key: "fastlane/google-play-key.json"
+    )
+  end
+
+  # =====================
+  # Promote Lane - Promote from Internal to Production
+  # =====================
+  desc "Promote internal testing build to production"
+  lane :promote_to_production do
+    upload_to_play_store(
+      track: "internal",
+      track_promote_to: "production",
+      skip_upload_aab: true,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      json_key: "fastlane/google-play-key.json"
+    )
+  end
+
+  # =====================
+  # Local Build Lane
+  # =====================
+  desc "Build APK for local testing"
+  lane :build_local do
+    gradle(
+      task: "assemble",
+      build_type: "Release"
+    )
+  end
+
+  # =====================
+  # Increment Version
+  # =====================
+  desc "Increment version code"
+  lane :increment_version do
+    # Read current version from pubspec.yaml
+    pubspec = File.read("../../pubspec.yaml")
+    current_version = pubspec.match(/version:\s*(\d+\.\d+\.\d+)\+(\d+)/)[2].to_i
+    new_version = current_version + 1
+    
+    # Update pubspec.yaml
+    new_pubspec = pubspec.gsub(/version:\s*(\d+\.\d+\.\d+)\+\d+/, "version: \\1+#{new_version}")
+    File.write("../../pubspec.yaml", new_pubspec)
+    
+    UI.success("Version code incremented to #{new_version}")
+  end
+
+  # =====================
+  # Firebase App Distribution (Optional)
+  # =====================
+  desc "Deploy to Firebase App Distribution"
+  lane :firebase do
+    apk_path = "../build/app/outputs/flutter-apk/app-release.apk"
+    
+    unless File.exist?(apk_path)
+      UI.user_error!("APK file not found at #{apk_path}. Please build Flutter first.")
+    end
+
+    firebase_app_distribution(
+      app: ENV["FIREBASE_APP_ID"],
+      apk_path: apk_path,
+      groups: "testers",
+      release_notes: changelog_from_git_commits(commits_count: 10)
+    )
+  end
+
+  # =====================
+  # Error Handling
+  # =====================
+  error do |lane, exception|
+    # Slack notification on error (optional)
+    # slack(
+    #   message: "Error in #{lane}: #{exception.message}",
+    #   success: false
+    # )
+  end
+end
+

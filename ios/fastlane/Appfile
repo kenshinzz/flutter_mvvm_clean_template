@@ -1,0 +1,17 @@
+# App Identifier (Bundle ID)
+# Replace with your actual bundle identifier
+app_identifier("com.example.mvvmCleanTemplate")
+
+# Apple Developer Account
+# Replace with your Apple ID
+apple_id("your-apple-id@example.com")
+
+# Team ID (if you have multiple teams)
+# team_id("YOUR_TEAM_ID")
+
+# App Store Connect Team ID (if different from Developer Portal)
+# itc_team_id("YOUR_ITC_TEAM_ID")
+
+# For more information about the Appfile, see:
+# https://docs.fastlane.tools/advanced/#appfile
+

@@ -142,6 +142,70 @@ Follow Clean Architecture principles when adding features. See the detailed exam
 - `logger` - Logging
 - `dartz` - Functional programming (Either type)
 
+### Testing
+- `mockito` - Mocking framework
+- `build_runner` - Code generation for mocks
+
+## Testing
+
+### Run Tests
+
+```bash
+# Run all tests
+flutter test
+
+# Run specific test file
+flutter test test/core/network/api_client_test.dart
+
+# Run tests with coverage
+flutter test --coverage
+```
+
+### Generate Mocks
+
+When adding new mock annotations, regenerate mocks with:
+
+```bash
+dart run build_runner build --delete-conflicting-outputs
+```
+
+### Test Structure
+
+```
+test/
+├── core/
+│   └── network/
+│       └── api_client_test.dart      # API client tests
+├── presentation/
+│   └── viewmodels/
+│       └── settings_viewmodel_test.dart  # ViewModel tests
+├── helpers/
+│   └── test_helpers.dart             # Test utilities
+└── widget_test.dart                  # Widget tests
+```
+
+## CI/CD
+
+This project includes GitHub Actions workflows and Fastlane for automated deployment.
+
+### Workflows
+
+| Workflow | Trigger | Description |
+|----------|---------|-------------|
+| `ci.yml` | Push/PR to main, develop | Analyze, test, build |
+| `cd-android.yml` | Tags `v*` / Manual | Deploy to Play Store |
+| `cd-ios.yml` | Tags `v*` / Manual | Deploy to TestFlight/App Store |
+
+### Quick Deploy
+
+```bash
+# Create a release tag to trigger deployment
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+For detailed setup instructions, see [CI_CD_SETUP.md](CI_CD_SETUP.md).
+
 ## License
 
 This project is a template and can be used freely.

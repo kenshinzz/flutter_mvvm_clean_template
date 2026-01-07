@@ -1,0 +1,163 @@
+# Fastfile for iOS
+# https://docs.fastlane.tools
+
+default_platform(:ios)
+
+platform :ios do
+  # =====================
+  # Before All
+  # =====================
+  before_all do
+    # Ensure we're on a clean state
+    ensure_git_status_clean unless ENV["CI"]
+  end
+
+  # =====================
+  # Beta Lane - Deploy to TestFlight
+  # =====================
+  desc "Deploy a new beta build to TestFlight"
+  lane :beta do
+    # Setup App Store Connect API Key
+    setup_ci if ENV["CI"]
+    
+    api_key = app_store_connect_api_key(
+      key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
+      issuer_id: ENV["APP_STORE_CONNECT_API_ISSUER_ID"],
+      key_filepath: "~/.appstoreconnect/private_keys/AuthKey_#{ENV['APP_STORE_CONNECT_API_KEY_ID']}.p8",
+      in_house: false
+    )
+
+    # Match - Code Signing
+    match(
+      type: "appstore",
+      readonly: is_ci,
+      api_key: api_key
+    )
+
+    # Increment build number
+    increment_build_number(
+      build_number: ENV["GITHUB_RUN_NUMBER"] || Time.now.strftime("%Y%m%d%H%M")
+    )
+
+    # Build the app
+    build_app(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner",
+      export_method: "app-store",
+      output_directory: "./build",
+      output_name: "Runner.ipa"
+    )
+
+    # Upload to TestFlight
+    upload_to_testflight(
+      api_key: api_key,
+      skip_waiting_for_build_processing: true,
+      changelog: changelog_from_git_commits(commits_count: 10)
+    )
+
+    # Clean up
+    clean_build_artifacts
+  end
+
+  # =====================
+  # Release Lane - Deploy to App Store
+  # =====================
+  desc "Deploy a new release to the App Store"
+  lane :release do
+    # Setup App Store Connect API Key
+    setup_ci if ENV["CI"]
+    
+    api_key = app_store_connect_api_key(
+      key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
+      issuer_id: ENV["APP_STORE_CONNECT_API_ISSUER_ID"],
+      key_filepath: "~/.appstoreconnect/private_keys/AuthKey_#{ENV['APP_STORE_CONNECT_API_KEY_ID']}.p8",
+      in_house: false
+    )
+
+    # Match - Code Signing
+    match(
+      type: "appstore",
+      readonly: is_ci,
+      api_key: api_key
+    )
+
+    # Increment build number
+    increment_build_number(
+      build_number: ENV["GITHUB_RUN_NUMBER"] || Time.now.strftime("%Y%m%d%H%M")
+    )
+
+    # Build the app
+    build_app(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner",
+      export_method: "app-store",
+      output_directory: "./build",
+      output_name: "Runner.ipa"
+    )
+
+    # Upload to App Store
+    upload_to_app_store(
+      api_key: api_key,
+      skip_screenshots: true,
+      skip_metadata: false,
+      submit_for_review: false,
+      automatic_release: false,
+      precheck_include_in_app_purchases: false
+    )
+
+    # Clean up
+    clean_build_artifacts
+  end
+
+  # =====================
+  # Local Build Lane
+  # =====================
+  desc "Build for local testing"
+  lane :build_local do
+    build_app(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner",
+      export_method: "development",
+      output_directory: "./build",
+      output_name: "Runner-dev.ipa"
+    )
+  end
+
+  # =====================
+  # Setup Certificates
+  # =====================
+  desc "Sync certificates and profiles"
+  lane :sync_certs do
+    match(type: "development", readonly: true)
+    match(type: "appstore", readonly: true)
+  end
+
+  # =====================
+  # Register New Devices
+  # =====================
+  desc "Register new device"
+  lane :register_device do
+    device_name = prompt(text: "Enter device name: ")
+    device_udid = prompt(text: "Enter device UDID: ")
+    
+    register_devices(
+      devices: {
+        device_name => device_udid
+      }
+    )
+    
+    match(type: "development", force_for_new_devices: true)
+  end
+
+  # =====================
+  # Error Handling
+  # =====================
+  error do |lane, exception|
+    # Slack notification on error (optional)
+    # slack(
+    #   message: "Error in #{lane}: #{exception.message}",
+    #   success: false
+    # )
+  end
+end
+
