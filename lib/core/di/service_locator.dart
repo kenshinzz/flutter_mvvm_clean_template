@@ -21,61 +21,51 @@ final getIt = GetIt.instance;
 Future<void> initializeDependencies() async {
   // ========== External Dependencies ==========
   final sharedPreferences = await SharedPreferences.getInstance();
-  getIt.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
-
-  getIt.registerLazySingleton<Connectivity>(Connectivity.new);
-
-  // HTTP Client
-  getIt.registerLazySingleton<http.Client>(http.Client.new);
-
-  // ========== Core ==========
-  getIt.registerLazySingleton<NetworkInfo>(
-    () => NetworkInfoImpl(getIt<Connectivity>()),
-  );
-
-  getIt.registerLazySingleton<ApiClient>(
-    () => ApiClient(client: getIt<http.Client>()),
-  );
-
-  // ========== Storage ==========
-  getIt.registerLazySingleton<SecureStorage>(SecureStorageImpl.new);
-
-  getIt.registerLazySingleton<AuthStorage>(
-    () => AuthStorage(secureStorage: getIt<SecureStorage>()),
-  );
-
-  // ========== Data Sources ==========
-  // User Data Sources
-  getIt.registerLazySingleton<UserRemoteDataSource>(
-    () => UserRemoteDataSourceImpl(apiClient: getIt<ApiClient>()),
-  );
-
-  getIt.registerLazySingleton<UserLocalDataSource>(
-    () =>
-        UserLocalDataSourceImpl(sharedPreferences: getIt<SharedPreferences>()),
-  );
-
-  // ========== Repositories ==========
-  getIt.registerLazySingleton<UserRepository>(
-    () => UserRepositoryImpl(
-      remoteDataSource: getIt<UserRemoteDataSource>(),
-      localDataSource: getIt<UserLocalDataSource>(),
-      networkInfo: getIt<NetworkInfo>(),
-    ),
-  );
-
-  // ========== Use Cases ==========
-  getIt.registerLazySingleton(
-    () => GetCurrentUserUseCase(repository: getIt<UserRepository>()),
-  );
-
-  getIt.registerLazySingleton(
-    () => GetUsersUseCase(repository: getIt<UserRepository>()),
-  );
-
-  getIt.registerLazySingleton(
-    () => UpdateUserUseCase(repository: getIt<UserRepository>()),
-  );
+  getIt
+    ..registerLazySingleton<SharedPreferences>(() => sharedPreferences)
+    ..registerLazySingleton<Connectivity>(Connectivity.new)
+    // HTTP Client
+    ..registerLazySingleton<http.Client>(http.Client.new)
+    // ========== Core ==========
+    ..registerLazySingleton<NetworkInfo>(
+      () => NetworkInfoImpl(getIt<Connectivity>()),
+    )
+    ..registerLazySingleton<ApiClient>(
+      () => ApiClient(client: getIt<http.Client>()),
+    )
+    // ========== Storage ==========
+    ..registerLazySingleton<SecureStorage>(SecureStorageImpl.new)
+    ..registerLazySingleton<AuthStorage>(
+      () => AuthStorage(secureStorage: getIt<SecureStorage>()),
+    )
+    // ========== Data Sources ==========
+    // User Data Sources
+    ..registerLazySingleton<UserRemoteDataSource>(
+      () => UserRemoteDataSourceImpl(apiClient: getIt<ApiClient>()),
+    )
+    ..registerLazySingleton<UserLocalDataSource>(
+      () => UserLocalDataSourceImpl(
+        sharedPreferences: getIt<SharedPreferences>(),
+      ),
+    )
+    // ========== Repositories ==========
+    ..registerLazySingleton<UserRepository>(
+      () => UserRepositoryImpl(
+        remoteDataSource: getIt<UserRemoteDataSource>(),
+        localDataSource: getIt<UserLocalDataSource>(),
+        networkInfo: getIt<NetworkInfo>(),
+      ),
+    )
+    // ========== Use Cases ==========
+    ..registerLazySingleton(
+      () => GetCurrentUserUseCase(repository: getIt<UserRepository>()),
+    )
+    ..registerLazySingleton(
+      () => GetUsersUseCase(repository: getIt<UserRepository>()),
+    )
+    ..registerLazySingleton(
+      () => UpdateUserUseCase(repository: getIt<UserRepository>()),
+    );
 
   // ========== ViewModels ==========
   // ViewModels are registered with Provider in providers.dart for reactive state management

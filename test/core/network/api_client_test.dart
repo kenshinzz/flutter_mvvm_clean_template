@@ -199,8 +199,9 @@ void main() {
 
       test('should not include auth token after clearing', () async {
         // Arrange
-        apiClient.setAuthToken('test-token');
-        apiClient.clearAuthToken();
+        apiClient
+          ..setAuthToken('test-token')
+          ..clearAuthToken();
         when(
           mockHttpClient.get(any, headers: anyNamed('headers')),
         ).thenAnswer((_) async => http.Response('{}', 200));

@@ -70,12 +70,6 @@ extension IntExtensions on int {
   /// Generate range list [0, 1, 2, ..., n-1]
   List<int> get range => List.generate(this, (i) => i);
 
-  /// Check if even
-  bool get isEven => this % 2 == 0;
-
-  /// Check if odd
-  bool get isOdd => this % 2 != 0;
-
   /// Ordinal suffix (1st, 2nd, 3rd, 4th, etc.)
   String get ordinal {
     if (this >= 11 && this <= 13) return '${this}th';

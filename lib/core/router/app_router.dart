@@ -17,30 +17,24 @@ class AppRouter {
       GoRoute(
         path: RouteNames.splash,
         name: 'splash',
-        pageBuilder: (context, state) => MaterialPage(
-          key: state.pageKey,
-          child: const SplashPage(),
-        ),
+        pageBuilder: (context, state) =>
+            MaterialPage(key: state.pageKey, child: const SplashPage()),
       ),
 
       // Home Route
       GoRoute(
         path: RouteNames.home,
         name: 'home',
-        pageBuilder: (context, state) => MaterialPage(
-          key: state.pageKey,
-          child: const HomePage(),
-        ),
+        pageBuilder: (context, state) =>
+            MaterialPage(key: state.pageKey, child: const HomePage()),
       ),
 
       // Settings Route
       GoRoute(
         path: RouteNames.settings,
         name: 'settings',
-        pageBuilder: (context, state) => MaterialPage(
-          key: state.pageKey,
-          child: const SettingsPage(),
-        ),
+        pageBuilder: (context, state) =>
+            MaterialPage(key: state.pageKey, child: const SettingsPage()),
       ),
 
       // Auth Routes (for future implementation)
@@ -74,100 +68,42 @@ class AppRouter {
     ],
 
     // Redirect logic (e.g., for authentication)
-    redirect: (context, state) {
-      // Example: Check if user is authenticated
-      // final isAuthenticated = false; // Replace with actual auth check
-
-      // Uncomment to implement authentication redirect
-      // if (!isAuthenticated && state.matchedLocation != RouteNames.login) {
-      //   return RouteNames.login;
-      // }
-
-      return null; // No redirect
-    },
+    // Example: Check if user is authenticated
+    // final isAuthenticated = false; // Replace with actual auth check
+    // Uncomment to implement authentication redirect
+    // if (!isAuthenticated && state.matchedLocation != RouteNames.login) {
+    //   return RouteNames.login;
+    // }
+    redirect: (context, state) => null, // No redirect
   );
 }
 
 // Error Page Widget
 class _ErrorPage extends StatelessWidget {
-
   const _ErrorPage({required this.error});
   final String error;
 
   @override
   Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(
-        title: const Text('Error'),
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.error_outline,
-                color: Colors.red,
-                size: 80,
-              ),
-              const SizedBox(height: 24),
-              Text(
-                'Oops! Something went wrong',
-                style: Theme.of(context).textTheme.headlineSmall,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                error,
-                style: Theme.of(context).textTheme.bodyMedium,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 32),
-              ElevatedButton.icon(
-                onPressed: () => context.go(RouteNames.home),
-                icon: const Icon(Icons.home),
-                label: const Text('Go to Home'),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-}
-
-// Coming Soon Page Widget (for unimplemented routes)
-class _ComingSoonPage extends StatelessWidget {
-
-  const _ComingSoonPage({required this.title});
-  final String title;
-
-  @override
-  Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
-        ),
-      ),
-      body: Center(
+    appBar: AppBar(title: const Text('Error')),
+    body: Center(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.construction,
-              size: 100,
-              color: Theme.of(context).colorScheme.primary,
-            ),
+            const Icon(Icons.error_outline, color: Colors.red, size: 80),
             const SizedBox(height: 24),
             Text(
-              'Coming Soon',
-              style: Theme.of(context).textTheme.headlineMedium,
+              'Oops! Something went wrong',
+              style: Theme.of(context).textTheme.headlineSmall,
+              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
             Text(
-              'This feature is under development',
-              style: Theme.of(context).textTheme.bodyLarge,
+              error,
+              style: Theme.of(context).textTheme.bodyMedium,
+              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 32),
             ElevatedButton.icon(
@@ -178,5 +114,51 @@ class _ComingSoonPage extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ),
+  );
+}
+
+// Coming Soon Page Widget (for unimplemented routes)
+class _ComingSoonPage extends StatelessWidget {
+  const _ComingSoonPage({required this.title});
+  final String title;
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(
+      title: Text(title),
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back),
+        onPressed: () => context.pop(),
+      ),
+    ),
+    body: Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.construction,
+            size: 100,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          const SizedBox(height: 24),
+          Text(
+            'Coming Soon',
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'This feature is under development',
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+          const SizedBox(height: 32),
+          ElevatedButton.icon(
+            onPressed: () => context.go(RouteNames.home),
+            icon: const Icon(Icons.home),
+            label: const Text('Go to Home'),
+          ),
+        ],
+      ),
+    ),
+  );
 }
