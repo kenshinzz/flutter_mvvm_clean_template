@@ -7,9 +7,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mvvm_clean_template/presentation/pages/home_page.dart';
 import 'package:mvvm_clean_template/presentation/viewmodels/settings_viewmodel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'helpers/test_helpers.dart';
 
@@ -23,7 +23,7 @@ void main() {
     settingsViewModel = SettingsViewModel(sharedPreferences: prefs);
   });
 
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('Counter increments smoke test', (tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(
       TestWrapper(
@@ -47,7 +47,7 @@ void main() {
   });
 
   testWidgets('Counter decrements when decrease button is pressed', (
-    WidgetTester tester,
+    tester,
   ) async {
     await tester.pumpWidget(
       TestWrapper(
@@ -71,7 +71,7 @@ void main() {
   });
 
   testWidgets('Counter resets when reset button is pressed', (
-    WidgetTester tester,
+    tester,
   ) async {
     await tester.pumpWidget(
       TestWrapper(
@@ -96,7 +96,7 @@ void main() {
     expect(find.text('0'), findsOneWidget);
   });
 
-  testWidgets('Home page shows welcome message', (WidgetTester tester) async {
+  testWidgets('Home page shows welcome message', (tester) async {
     await tester.pumpWidget(
       TestWrapper(
         settingsViewModel: settingsViewModel,
@@ -110,7 +110,7 @@ void main() {
   });
 
   testWidgets('Settings button navigates correctly', (
-    WidgetTester tester,
+    tester,
   ) async {
     await tester.pumpWidget(
       TestWrapper(

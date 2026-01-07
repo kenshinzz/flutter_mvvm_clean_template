@@ -3,6 +3,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /// ViewModel for managing app settings (theme mode and locale)
 class SettingsViewModel extends ChangeNotifier {
+
+  SettingsViewModel({
+    required SharedPreferences sharedPreferences,
+  }) : _sharedPreferences = sharedPreferences {
+    _loadSettings();
+  }
   final SharedPreferences _sharedPreferences;
 
   // Keys for SharedPreferences
@@ -23,12 +29,6 @@ class SettingsViewModel extends ChangeNotifier {
   bool get isDarkMode => _themeMode == ThemeMode.dark;
   bool get isLightMode => _themeMode == ThemeMode.light;
   bool get isSystemMode => _themeMode == ThemeMode.system;
-
-  SettingsViewModel({
-    required SharedPreferences sharedPreferences,
-  }) : _sharedPreferences = sharedPreferences {
-    _loadSettings();
-  }
 
   /// Load settings from SharedPreferences
   Future<void> _loadSettings() async {

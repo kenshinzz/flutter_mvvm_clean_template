@@ -1,27 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
 import 'package:mvvm_clean_template/l10n/app_localizations.dart';
 import 'package:mvvm_clean_template/presentation/viewmodels/settings_viewmodel.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Creates a test wrapper widget with all necessary providers and localizations
 class TestWrapper extends StatelessWidget {
+
+  const TestWrapper({
+    required this.child, super.key,
+    this.settingsViewModel,
+    this.locale,
+  });
   final Widget child;
   final SettingsViewModel? settingsViewModel;
   final Locale? locale;
 
-  const TestWrapper({
-    super.key,
-    required this.child,
-    this.settingsViewModel,
-    this.locale,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  Widget build(BuildContext context) => MaterialApp(
       locale: locale ?? const Locale('en'),
       localizationsDelegates: const [
         AppLocalizations.delegate,
@@ -37,7 +35,6 @@ class TestWrapper extends StatelessWidget {
             )
           : child,
     );
-  }
 }
 
 /// Helper to pump widget with all necessary setup

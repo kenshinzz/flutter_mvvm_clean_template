@@ -60,6 +60,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get retry => 'ลองอีกครั้ง';
 
   @override
+  String get tryAgain => 'ลองอีกครั้ง';
+
+  @override
   String get submit => 'ส่ง';
 
   @override

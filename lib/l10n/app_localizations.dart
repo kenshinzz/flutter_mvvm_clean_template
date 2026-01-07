@@ -200,6 +200,12 @@ abstract class AppLocalizations {
   /// **'Retry'**
   String get retry;
 
+  /// Try again button text
+  ///
+  /// In en, this message translates to:
+  /// **'Try Again'**
+  String get tryAgain;
+
   /// Submit button text
   ///
   /// In en, this message translates to:

@@ -68,6 +68,10 @@
   "@retry": {
     "description": "Retry button text"
   },
+  "tryAgain": "Try Again",
+  "@tryAgain": {
+    "description": "Try again button text"
+  },
   "submit": "Submit",
   "@submit": {
     "description": "Submit button text"

@@ -30,17 +30,17 @@ class _SplashPageState extends State<SplashPage>
       duration: const Duration(milliseconds: 1500),
     );
 
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _animationController,
-        curve: const Interval(0.0, 0.65, curve: Curves.easeIn),
+        curve: const Interval(0, 0.65, curve: Curves.easeIn),
       ),
     );
 
-    _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
+    _scaleAnimation = Tween<double>(begin: 0.5, end: 1).animate(
       CurvedAnimation(
         parent: _animationController,
-        curve: const Interval(0.0, 0.65, curve: Curves.easeOutBack),
+        curve: const Interval(0, 0.65, curve: Curves.easeOutBack),
       ),
     );
 
@@ -68,7 +68,7 @@ class _SplashPageState extends State<SplashPage>
     final l10n = AppLocalizations.of(context);
 
     return Scaffold(
-      body: Container(
+      body: DecoratedBox(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -86,8 +86,7 @@ class _SplashPageState extends State<SplashPage>
               // Animated Logo
               AnimatedBuilder(
                 animation: _animationController,
-                builder: (context, child) {
-                  return FadeTransition(
+                builder: (context, child) => FadeTransition(
                     opacity: _fadeAnimation,
                     child: ScaleTransition(
                       scale: _scaleAnimation,
@@ -112,8 +111,7 @@ class _SplashPageState extends State<SplashPage>
                         ),
                       ),
                     ),
-                  );
-                },
+                  ),
               ),
               const SizedBox(height: 32),
               // App Name

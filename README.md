@@ -1,46 +1,88 @@
 # Flutter MVVM Clean Architecture Template
 
-A production-ready Flutter project template implementing MVVM Clean Architecture pattern with comprehensive theme management and localization support.
+A production-ready Flutter project template implementing MVVM Clean Architecture pattern with comprehensive theme management, localization, environment configuration, and testing support.
 
 ## Project Structure
 
 ```
 lib/
 ├── core/
+│   ├── config/
+│   │   ├── app_config.dart               # Global app configuration
+│   │   └── env_config.dart               # Environment-specific config
 │   ├── constants/
-│   │   └── app_constants.dart          # Application-wide constants
+│   │   └── app_constants.dart            # Application-wide constants
+│   ├── di/
+│   │   ├── providers.dart                # Provider definitions
+│   │   └── service_locator.dart          # GetIt dependency injection
 │   ├── errors/
-│   │   ├── exceptions.dart             # Exception classes
-│   │   └── failures.dart               # Failure classes for error handling
+│   │   ├── exceptions.dart               # Exception classes
+│   │   └── failures.dart                 # Failure classes for error handling
+│   ├── extensions/
+│   │   ├── context_extensions.dart       # BuildContext extensions
+│   │   ├── datetime_extensions.dart      # DateTime extensions
+│   │   ├── extensions.dart               # Barrel file
+│   │   ├── list_extensions.dart          # List extensions
+│   │   ├── num_extensions.dart           # Number extensions
+│   │   └── string_extensions.dart        # String extensions
+│   ├── lifecycle/
+│   │   └── app_lifecycle_handler.dart    # App lifecycle management
 │   ├── network/
-│   │   ├── api_client.dart             # HTTP-based API client
-│   │   └── network_info.dart           # Network connectivity checker
+│   │   ├── api_client.dart               # HTTP-based API client
+│   │   └── network_info.dart             # Network connectivity checker
+│   ├── state/
+│   │   ├── async_state.dart              # Generic async state handling
+│   │   └── pagination_state.dart         # Pagination state handling
+│   ├── storage/
+│   │   ├── auth_storage.dart             # Auth token storage
+│   │   └── secure_storage.dart           # Secure storage wrapper
 │   ├── theme/
-│   │   ├── app_colors.dart             # Color palette
-│   │   ├── app_text_styles.dart        # Text styles
-│   │   └── app_theme.dart              # Theme configuration
+│   │   ├── app_colors.dart               # Color palette
+│   │   ├── app_text_styles.dart          # Text styles
+│   │   └── app_theme.dart                # Theme configuration
 │   ├── usecases/
-│   │   └── usecase.dart                # Base UseCase class
+│   │   └── usecase.dart                  # Base UseCase class
 │   └── utils/
-│       ├── date_utils.dart             # Date/time utilities
-│       ├── logger.dart                 # Logging utility
-│       └── validators.dart             # Input validators
+│       ├── date_utils.dart               # Date/time utilities
+│       ├── logger.dart                   # Logging utility
+│       └── validators.dart               # Input validators
 ├── data/
-│   ├── datasources/                    # Remote & local data sources
-│   ├── models/                         # Data models (JSON serializable)
-│   └── repositories/                   # Repository implementations
+│   ├── datasources/
+│   │   ├── user_local_datasource.dart    # User local cache
+│   │   └── user_remote_datasource.dart   # User API calls
+│   ├── models/
+│   │   └── user_model.dart               # User data model
+│   └── repositories/
+│       └── user_repository_impl.dart     # User repository implementation
 ├── domain/
-│   ├── entities/                       # Business entities
-│   ├── repositories/                   # Repository interfaces
-│   └── usecases/                       # Business logic use cases
+│   ├── entities/
+│   │   └── user_entity.dart              # User business entity
+│   ├── repositories/
+│   │   └── user_repository.dart          # User repository interface
+│   └── usecases/
+│       ├── get_current_user_usecase.dart # Get current user
+│       ├── get_users_usecase.dart        # Get users list
+│       └── update_user_usecase.dart      # Update user
 ├── presentation/
-│   ├── pages/                          # UI screens/pages
-│   ├── viewmodels/                     # State management (ViewModels)
-│   └── widgets/                        # Reusable widgets
+│   ├── pages/
+│   │   ├── home_page.dart                # Home screen
+│   │   ├── settings_page.dart            # Settings screen
+│   │   └── splash_page.dart              # Splash screen
+│   ├── viewmodels/
+│   │   └── settings_viewmodel.dart       # Settings state management
+│   └── widgets/
+│       └── common/
+│           ├── async_value_widget.dart   # Async state widget builder
+│           ├── empty_state_widget.dart   # Empty state display
+│           ├── error_widget.dart         # Error display
+│           └── loading_widget.dart       # Loading indicators
 ├── l10n/
-│   ├── app_en.arb                      # English translations
-│   └── app_th.arb                      # Thai translations
-└── main.dart                           # Application entry point
+│   ├── app_en.arb                        # English translations
+│   └── app_th.arb                        # Thai translations
+├── main.dart                             # Default entry point
+├── main_dev.dart                         # Development entry point
+├── main_staging.dart                     # Staging entry point
+└── main_prod.dart                        # Production entry point
 ```
 
 ## Architecture Overview
@@ -64,26 +106,62 @@ This project follows **MVVM Clean Architecture** principles with three main laye
 
 ## Features
 
-### Theme Management
+### 🌍 Environment Configuration
+
+Support for multiple environments with separate configurations:
+
+```bash
+# Development
+flutter run -t lib/main_dev.dart
+
+# Staging
+flutter run -t lib/main_staging.dart
+
+# Production
+flutter run -t lib/main_prod.dart --release
+```
+
+### 🎨 Theme Management
 - Light and Dark theme support
 - Material Design 3 (Material You)
 - Comprehensive color palette
 - Consistent text styles
 - Customizable component themes
 
-### Localization
+### 🌐 Localization
 - Support for multiple languages (English & Thai by default)
 - Easy to add more languages
 - Type-safe translations with code generation
 - Flutter's official l10n approach
 
-### Core Utilities
-- **API Client**: Pre-configured HTTP client with error handling
-- **Network Info**: Connectivity checking
-- **Validators**: Common input validation (email, password, phone, etc.)
-- **Logger**: Debug and production logging
-- **Date Utils**: Date/time formatting and manipulation
-- **Error Handling**: Structured exceptions and failures
+### 🔒 Secure Storage
+- Encrypted storage for sensitive data
+- Auth token management
+- Platform-specific secure storage (Keychain/EncryptedSharedPreferences)
+
+### 📱 App Lifecycle
+- Lifecycle event handling
+- Easy-to-use mixin or widget wrapper
+- Handle resume, pause, inactive states
+
+### 🔧 Extensions Library
+- **String**: Email validation, formatting, masking
+- **DateTime**: Relative time, formatting, comparisons
+- **BuildContext**: Theme, media query, navigation, snackbars
+- **List**: Grouping, sorting, pagination helpers
+- **Numbers**: Currency, file size, percentage formatting
+
+### ⚡ Async State Management
+- Generic `AsyncState<T>` for loading/success/error states
+- `PaginationState<T>` for paginated data
+- Pre-built widgets: `AsyncValueWidget`, `LoadingWidget`, `AppErrorWidget`, `EmptyStateWidget`
+
+### 📦 Example Feature Module
+Complete User feature demonstrating the full architecture:
+- Entity → Model → Repository Interface → Repository Implementation
+- Remote & Local Data Sources with caching
+- Use Cases for business operations
+- Ready to use as a template for new features
 
 ## Getting Started
 
@@ -99,23 +177,75 @@ flutter pub get
 flutter gen-l10n
 ```
 
-Or run:
-
-```bash
-flutter pub get
-```
-
-This will automatically generate localization files in `.dart_tool/flutter_gen/gen_l10n/`.
-
 ### 3. Run the Application
 
 ```bash
+# Development mode
+flutter run -t lib/main_dev.dart
+
+# Or default
 flutter run
 ```
 
 ## Adding New Features
 
-Follow Clean Architecture principles when adding features. See the detailed examples in the full documentation.
+### 1. Create Entity (Domain Layer)
+
+```dart
+// lib/domain/entities/product_entity.dart
+class ProductEntity extends Equatable {
+  final String id;
+  final String name;
+  final double price;
+  
+  const ProductEntity({...});
+}
+```
+
+### 2. Create Model (Data Layer)
+
+```dart
+// lib/data/models/product_model.dart
+class ProductModel extends ProductEntity {
+  factory ProductModel.fromJson(Map<String, dynamic> json) => ...
+  Map<String, dynamic> toJson() => ...
+}
+```
+
+### 3. Define Repository Interface (Domain Layer)
+
+```dart
+// lib/domain/repositories/product_repository.dart
+abstract class ProductRepository {
+  Future<Either<Failure, List<ProductEntity>>> getProducts();
+}
+```
+
+### 4. Implement Repository (Data Layer)
+
+```dart
+// lib/data/repositories/product_repository_impl.dart
+class ProductRepositoryImpl implements ProductRepository {
+  // Implement with data sources
+}
+```
+
+### 5. Create Use Cases (Domain Layer)
+
+```dart
+// lib/domain/usecases/get_products_usecase.dart
+class GetProductsUseCase implements UseCase<List<ProductEntity>, NoParams> {
+  Future<Either<Failure, List<ProductEntity>>> call(NoParams params) => ...
+}
+```
+
+### 6. Register Dependencies
+
+```dart
+// lib/core/di/service_locator.dart
+getIt.registerLazySingleton<ProductRepository>(() => ProductRepositoryImpl(...));
+getIt.registerLazySingleton(() => GetProductsUseCase(...));
+```
 
 ## Dependencies
 
@@ -124,7 +254,7 @@ Follow Clean Architecture principles when adding features. See the detailed exam
 - `flutter_localizations` - Localization support
 
 ### State Management
-- `provider` - State management solution
+- `provider` - Reactive state management
 
 ### Network
 - `http` - HTTP client
@@ -132,6 +262,7 @@ Follow Clean Architecture principles when adding features. See the detailed exam
 
 ### Storage
 - `shared_preferences` - Local key-value storage
+- `flutter_secure_storage` - Encrypted storage for sensitive data
 
 ### Dependency Injection
 - `get_it` - Service locator
@@ -164,8 +295,6 @@ flutter test --coverage
 
 ### Generate Mocks
 
-When adding new mock annotations, regenerate mocks with:
-
 ```bash
 dart run build_runner build --delete-conflicting-outputs
 ```
@@ -189,21 +318,17 @@ flutter test --exclude-tags=golden
 test/
 ├── core/
 │   └── network/
-│       └── api_client_test.dart        # API client tests
+│       └── api_client_test.dart          # API client tests
 ├── presentation/
 │   └── viewmodels/
-│       └── settings_viewmodel_test.dart # ViewModel tests
+│       └── settings_viewmodel_test.dart  # ViewModel tests
 ├── golden/
-│   ├── pages/
-│   │   ├── home_page_golden_test.dart   # Page golden tests
-│   │   └── settings_page_golden_test.dart
-│   └── widgets/
-│       ├── button_golden_test.dart      # Widget golden tests
-│       └── card_golden_test.dart
+│   ├── pages/                            # Page golden tests
+│   └── widgets/                          # Widget golden tests
 ├── helpers/
-│   └── test_helpers.dart               # Test utilities
-├── flutter_test_config.dart            # Alchemist config
-└── widget_test.dart                    # Widget tests
+│   └── test_helpers.dart                 # Test utilities
+├── flutter_test_config.dart              # Alchemist config
+└── widget_test.dart                      # Widget tests
 ```
 
 ## CI/CD

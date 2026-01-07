@@ -16,7 +16,7 @@ void main() {
           name: 'simple card',
           child: const Card(
             child: Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(16),
               child: Text('Simple Card Content'),
             ),
           ),
@@ -25,7 +25,7 @@ void main() {
           name: 'card with title and content',
           child: const Card(
             child: Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -45,7 +45,7 @@ void main() {
           name: 'card with action buttons',
           child: Card(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import 'package:mvvm_clean_template/core/router/route_names.dart';
 import 'package:mvvm_clean_template/l10n/app_localizations.dart';
 import 'package:mvvm_clean_template/presentation/viewmodels/settings_viewmodel.dart';
+import 'package:provider/provider.dart';
 
 /// Home page with counter example and navigation to other pages
 class HomePage extends StatefulWidget {
@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> {
       drawer: _buildDrawer(context, l10n),
       body: Center(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
               // Current theme info
               Card(
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16),
                   child: Column(
                     children: [
                       Icon(
@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
               // Counter section
               Card(
                 child: Padding(
-                  padding: const EdgeInsets.all(24.0),
+                  padding: const EdgeInsets.all(24),
                   child: Column(
                     children: [
                       Text(
@@ -163,12 +163,12 @@ class _HomePageState extends State<HomePage> {
                     label: Text(l10n.profile),
                   ),
                   OutlinedButton.icon(
-                    onPressed: () => settingsViewModel.toggleTheme(),
+                    onPressed: settingsViewModel.toggleTheme,
                     icon: const Icon(Icons.brightness_6),
                     label: Text(l10n.toggleTheme),
                   ),
                   OutlinedButton.icon(
-                    onPressed: () => settingsViewModel.toggleLanguage(),
+                    onPressed: settingsViewModel.toggleLanguage,
                     icon: const Icon(Icons.language),
                     label: Text(l10n.toggleLanguage),
                   ),
@@ -186,8 +186,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildDrawer(BuildContext context, AppLocalizations l10n) {
-    return Drawer(
+  Widget _buildDrawer(BuildContext context, AppLocalizations l10n) => Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -262,7 +261,6 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
-  }
 
   void _showAboutDialog(BuildContext context, AppLocalizations l10n) {
     showAboutDialog(

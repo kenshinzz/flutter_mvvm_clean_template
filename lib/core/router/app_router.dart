@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mvvm_clean_template/core/router/route_names.dart';
-import 'package:mvvm_clean_template/presentation/pages/splash_page.dart';
 import 'package:mvvm_clean_template/presentation/pages/home_page.dart';
 import 'package:mvvm_clean_template/presentation/pages/settings_page.dart';
+import 'package:mvvm_clean_template/presentation/pages/splash_page.dart';
 
 class AppRouter {
   AppRouter._();
@@ -74,7 +74,7 @@ class AppRouter {
     ],
 
     // Redirect logic (e.g., for authentication)
-    redirect: (BuildContext context, GoRouterState state) {
+    redirect: (context, state) {
       // Example: Check if user is authenticated
       // final isAuthenticated = false; // Replace with actual auth check
 
@@ -90,19 +90,18 @@ class AppRouter {
 
 // Error Page Widget
 class _ErrorPage extends StatelessWidget {
-  final String error;
 
   const _ErrorPage({required this.error});
+  final String error;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
         title: const Text('Error'),
       ),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -134,18 +133,16 @@ class _ErrorPage extends StatelessWidget {
         ),
       ),
     );
-  }
 }
 
 // Coming Soon Page Widget (for unimplemented routes)
 class _ComingSoonPage extends StatelessWidget {
-  final String title;
 
   const _ComingSoonPage({required this.title});
+  final String title;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
         title: Text(title),
         leading: IconButton(
@@ -182,5 +179,4 @@ class _ComingSoonPage extends StatelessWidget {
         ),
       ),
     );
-  }
 }

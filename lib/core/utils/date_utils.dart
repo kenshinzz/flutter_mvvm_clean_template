@@ -5,19 +5,13 @@ class AppDateUtils {
   AppDateUtils._();
 
   // Format date to string
-  static String formatDate(DateTime date, {String format = AppConstants.displayDateFormat}) {
-    return DateFormat(format).format(date);
-  }
+  static String formatDate(DateTime date, {String format = AppConstants.displayDateFormat}) => DateFormat(format).format(date);
 
   // Format datetime to string
-  static String formatDateTime(DateTime dateTime, {String format = AppConstants.displayDateTimeFormat}) {
-    return DateFormat(format).format(dateTime);
-  }
+  static String formatDateTime(DateTime dateTime, {String format = AppConstants.displayDateTimeFormat}) => DateFormat(format).format(dateTime);
 
   // Format time to string
-  static String formatTime(DateTime time, {String format = AppConstants.timeFormat}) {
-    return DateFormat(format).format(time);
-  }
+  static String formatTime(DateTime time, {String format = AppConstants.timeFormat}) => DateFormat(format).format(time);
 
   // Parse string to date
   static DateTime? parseDate(String dateString, {String format = AppConstants.dateFormat}) {
@@ -80,34 +74,22 @@ class AppDateUtils {
   }
 
   // Get start of day
-  static DateTime getStartOfDay(DateTime date) {
-    return DateTime(date.year, date.month, date.day);
-  }
+  static DateTime getStartOfDay(DateTime date) => DateTime(date.year, date.month, date.day);
 
   // Get end of day
-  static DateTime getEndOfDay(DateTime date) {
-    return DateTime(date.year, date.month, date.day, 23, 59, 59, 999);
-  }
+  static DateTime getEndOfDay(DateTime date) => DateTime(date.year, date.month, date.day, 23, 59, 59, 999);
 
   // Get start of month
-  static DateTime getStartOfMonth(DateTime date) {
-    return DateTime(date.year, date.month, 1);
-  }
+  static DateTime getStartOfMonth(DateTime date) => DateTime(date.year, date.month);
 
   // Get end of month
-  static DateTime getEndOfMonth(DateTime date) {
-    return DateTime(date.year, date.month + 1, 0, 23, 59, 59, 999);
-  }
+  static DateTime getEndOfMonth(DateTime date) => DateTime(date.year, date.month + 1, 0, 23, 59, 59, 999);
 
   // Add days to date
-  static DateTime addDays(DateTime date, int days) {
-    return date.add(Duration(days: days));
-  }
+  static DateTime addDays(DateTime date, int days) => date.add(Duration(days: days));
 
   // Subtract days from date
-  static DateTime subtractDays(DateTime date, int days) {
-    return date.subtract(Duration(days: days));
-  }
+  static DateTime subtractDays(DateTime date, int days) => date.subtract(Duration(days: days));
 
   // Get difference in days
   static int getDifferenceInDays(DateTime start, DateTime end) {
@@ -117,7 +99,5 @@ class AppDateUtils {
   }
 
   // Check if two dates are the same day
-  static bool isSameDay(DateTime date1, DateTime date2) {
-    return date1.year == date2.year && date1.month == date2.month && date1.day == date2.day;
-  }
+  static bool isSameDay(DateTime date1, DateTime date2) => date1.year == date2.year && date1.month == date2.month && date1.day == date2.day;
 }

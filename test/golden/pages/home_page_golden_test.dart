@@ -4,9 +4,9 @@ library;
 import 'package:alchemist/alchemist.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mvvm_clean_template/presentation/pages/home_page.dart';
 import 'package:mvvm_clean_template/presentation/viewmodels/settings_viewmodel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../helpers/test_helpers.dart';
 

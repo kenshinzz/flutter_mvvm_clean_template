@@ -1,11 +1,10 @@
-import 'package:provider/provider.dart';
 import 'package:mvvm_clean_template/core/di/service_locator.dart';
 import 'package:mvvm_clean_template/presentation/viewmodels/settings_viewmodel.dart';
+import 'package:provider/provider.dart';
 
 /// Configure all providers for the application
 /// This uses Provider for reactive state management of ViewModels
-List<ChangeNotifierProvider> getProviders() {
-  return [
+List<ChangeNotifierProvider> getProviders() => [
     // Settings ViewModel
     ChangeNotifierProvider<SettingsViewModel>(
       create: (_) => SettingsViewModel(
@@ -29,7 +28,6 @@ List<ChangeNotifierProvider> getProviders() {
     //   ),
     // ),
   ];
-}
 
 /// Alternative approach: Use ProxyProvider for ViewModels that depend on other providers
 /// Example:

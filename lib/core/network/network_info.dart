@@ -6,9 +6,9 @@ abstract class NetworkInfo {
 }
 
 class NetworkInfoImpl implements NetworkInfo {
-  final Connectivity connectivity;
 
   NetworkInfoImpl(this.connectivity);
+  final Connectivity connectivity;
 
   @override
   Future<bool> get isConnected async {
@@ -19,9 +19,7 @@ class NetworkInfoImpl implements NetworkInfo {
   }
 
   @override
-  Stream<bool> get onConnectivityChanged {
-    return connectivity.onConnectivityChanged.map(
+  Stream<bool> get onConnectivityChanged => connectivity.onConnectivityChanged.map(
       (results) => results.any((result) => result != ConnectivityResult.none),
     );
-  }
 }

@@ -32,17 +32,17 @@ class Validators {
     }
 
     // Check for at least one uppercase letter
-    if (!value.contains(RegExp(r'[A-Z]'))) {
+    if (!value.contains(RegExp('[A-Z]'))) {
       return 'Password must contain at least one uppercase letter';
     }
 
     // Check for at least one lowercase letter
-    if (!value.contains(RegExp(r'[a-z]'))) {
+    if (!value.contains(RegExp('[a-z]'))) {
       return 'Password must contain at least one lowercase letter';
     }
 
     // Check for at least one digit
-    if (!value.contains(RegExp(r'[0-9]'))) {
+    if (!value.contains(RegExp('[0-9]'))) {
       return 'Password must contain at least one number';
     }
 

@@ -68,6 +68,10 @@
   "@retry": {
     "description": "Retry button text"
   },
+  "tryAgain": "ลองอีกครั้ง",
+  "@tryAgain": {
+    "description": "Try again button text"
+  },
   "submit": "ส่ง",
   "@submit": {
     "description": "Submit button text"

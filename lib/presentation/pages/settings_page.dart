@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import 'package:mvvm_clean_template/l10n/app_localizations.dart';
 import 'package:mvvm_clean_template/presentation/viewmodels/settings_viewmodel.dart';
+import 'package:provider/provider.dart';
 
 /// Settings page for theme and language configuration
 class SettingsPage extends StatelessWidget {
@@ -22,7 +22,7 @@ class SettingsPage extends StatelessWidget {
         ),
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         children: [
           // Theme Section
           _buildSectionHeader(context, l10n.theme, Icons.palette),
@@ -61,8 +61,7 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionHeader(BuildContext context, String title, IconData icon) {
-    return Row(
+  Widget _buildSectionHeader(BuildContext context, String title, IconData icon) => Row(
       children: [
         Icon(
           icon,
@@ -78,12 +77,10 @@ class SettingsPage extends StatelessWidget {
         ),
       ],
     );
-  }
 
-  Widget _buildThemeCard(BuildContext context, SettingsViewModel viewModel, AppLocalizations l10n) {
-    return Card(
+  Widget _buildThemeCard(BuildContext context, SettingsViewModel viewModel, AppLocalizations l10n) => Card(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -146,7 +143,6 @@ class SettingsPage extends StatelessWidget {
         ),
       ),
     );
-  }
 
   Widget _buildThemeOption(
     BuildContext context,
@@ -205,10 +201,9 @@ class SettingsPage extends StatelessWidget {
   }
 
   Widget _buildLanguageCard(
-      BuildContext context, SettingsViewModel viewModel, AppLocalizations l10n) {
-    return Card(
+      BuildContext context, SettingsViewModel viewModel, AppLocalizations l10n) => Card(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -256,7 +251,6 @@ class SettingsPage extends StatelessWidget {
         ),
       ),
     );
-  }
 
   Widget _buildLanguageOption(
     BuildContext context,
@@ -321,10 +315,9 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildAboutCard(BuildContext context, AppLocalizations l10n) {
-    return Card(
+  Widget _buildAboutCard(BuildContext context, AppLocalizations l10n) => Card(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -350,25 +343,25 @@ class SettingsPage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            Wrap(
+            const Wrap(
               spacing: 8,
               runSpacing: 8,
               children: [
                 Chip(
-                  label: const Text('Flutter 3+'),
-                  avatar: const Icon(Icons.flutter_dash, size: 18),
+                  label: Text('Flutter 3+'),
+                  avatar: Icon(Icons.flutter_dash, size: 18),
                 ),
                 Chip(
-                  label: const Text('MVVM'),
-                  avatar: const Icon(Icons.architecture, size: 18),
+                  label: Text('MVVM'),
+                  avatar: Icon(Icons.architecture, size: 18),
                 ),
                 Chip(
-                  label: const Text('GoRouter'),
-                  avatar: const Icon(Icons.route, size: 18),
+                  label: Text('GoRouter'),
+                  avatar: Icon(Icons.route, size: 18),
                 ),
                 Chip(
-                  label: const Text('Provider'),
-                  avatar: const Icon(Icons.inventory, size: 18),
+                  label: Text('Provider'),
+                  avatar: Icon(Icons.inventory, size: 18),
                 ),
               ],
             ),
@@ -376,7 +369,6 @@ class SettingsPage extends StatelessWidget {
         ),
       ),
     );
-  }
 
   void _showResetDialog(
       BuildContext context, SettingsViewModel viewModel, AppLocalizations l10n) {

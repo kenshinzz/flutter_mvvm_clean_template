@@ -1,36 +1,37 @@
-import 'dart:convert';
 import 'dart:async';
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:mvvm_clean_template/core/constants/app_constants.dart';
 import 'package:mvvm_clean_template/core/errors/exceptions.dart';
 
 /// Response wrapper class to provide similar interface as before
 class ApiResponse {
-  final int statusCode;
-  final dynamic data;
-  final Map<String, String> headers;
 
   ApiResponse({
     required this.statusCode,
     required this.data,
     required this.headers,
   });
+  final int statusCode;
+  final dynamic data;
+  final Map<String, String> headers;
 }
 
 class ApiClient {
-  final http.Client _client;
-  final String _baseUrl;
-  final Duration _timeout;
-  final Map<String, String> _defaultHeaders;
 
   ApiClient({http.Client? client})
     : _client = client ?? http.Client(),
       _baseUrl = '${AppConstants.baseUrl}/${AppConstants.apiVersion}',
-      _timeout = Duration(milliseconds: AppConstants.connectionTimeout),
+      _timeout = const Duration(milliseconds: AppConstants.connectionTimeout),
       _defaultHeaders = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       };
+  final http.Client _client;
+  final String _baseUrl;
+  final Duration _timeout;
+  final Map<String, String> _defaultHeaders;
 
   /// Set authorization token
   void setAuthToken(String token) {
@@ -61,9 +62,7 @@ class ApiClient {
   }
 
   /// Merge headers
-  Map<String, String> _mergeHeaders(Map<String, String>? additionalHeaders) {
-    return {..._defaultHeaders, ...?additionalHeaders};
-  }
+  Map<String, String> _mergeHeaders(Map<String, String>? additionalHeaders) => {..._defaultHeaders, ...?additionalHeaders};
 
   /// Parse response body
   dynamic _parseResponseBody(http.Response response) {
@@ -114,7 +113,7 @@ class ApiClient {
           e is NotFoundException) {
         rethrow;
       }
-      throw NetworkException('Network error occurred');
+      throw NetworkException();
     }
   }
 
@@ -145,7 +144,7 @@ class ApiClient {
           e is NotFoundException) {
         rethrow;
       }
-      throw NetworkException('Network error occurred');
+      throw NetworkException();
     }
   }
 
@@ -176,7 +175,7 @@ class ApiClient {
           e is NotFoundException) {
         rethrow;
       }
-      throw NetworkException('Network error occurred');
+      throw NetworkException();
     }
   }
 
@@ -207,7 +206,7 @@ class ApiClient {
           e is NotFoundException) {
         rethrow;
       }
-      throw NetworkException('Network error occurred');
+      throw NetworkException();
     }
   }
 
@@ -241,7 +240,7 @@ class ApiClient {
           e is NotFoundException) {
         rethrow;
       }
-      throw NetworkException('Network error occurred');
+      throw NetworkException();
     }
   }
 
@@ -255,7 +254,7 @@ class ApiClient {
       case 403:
         return AuthorizationException('Forbidden');
       case 404:
-        return NotFoundException('Resource not found');
+        return NotFoundException();
       case 500:
       case 502:
       case 503:
