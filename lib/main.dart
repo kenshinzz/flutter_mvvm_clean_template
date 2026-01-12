@@ -2,21 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mvvm_clean_template/core/di/providers.dart';
-import 'package:mvvm_clean_template/core/di/service_locator.dart';
 import 'package:mvvm_clean_template/core/router/app_router.dart';
 import 'package:mvvm_clean_template/core/theme/app_theme.dart';
 import 'package:mvvm_clean_template/l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   // Ensure Flutter is initialized
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize dependencies (GetIt)
-  await initializeDependencies();
+  // Initialize SharedPreferences before running the app
+  final sharedPreferences = await SharedPreferences.getInstance();
 
   runApp(
-    const ProviderScope(
-      child: MyApp(),
+    ProviderScope(
+      overrides: [
+        // Override the sharedPreferencesProvider with the actual instance
+        sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+      ],
+      child: const MyApp(),
     ),
   );
 }

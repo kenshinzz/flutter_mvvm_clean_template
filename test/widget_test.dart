@@ -9,49 +9,39 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mvvm_clean_template/core/di/service_locator.dart';
+import 'package:mvvm_clean_template/core/di/providers.dart';
 import 'package:mvvm_clean_template/l10n/app_localizations.dart';
 import 'package:mvvm_clean_template/presentation/pages/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
+  late Override sharedPrefsOverride;
+
   setUp(() async {
     // Set up mock SharedPreferences
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
-
-    // Register SharedPreferences with GetIt
-    if (getIt.isRegistered<SharedPreferences>()) {
-      getIt.unregister<SharedPreferences>();
-    }
-    getIt.registerSingleton<SharedPreferences>(prefs);
-  });
-
-  tearDown(() {
-    if (getIt.isRegistered<SharedPreferences>()) {
-      getIt.unregister<SharedPreferences>();
-    }
+    sharedPrefsOverride = sharedPreferencesProvider.overrideWithValue(prefs);
   });
 
   Widget buildTestApp({required Widget child}) => ProviderScope(
-        child: MaterialApp(
-          locale: const Locale('en'),
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: const [Locale('en', ''), Locale('th', '')],
-          home: child,
-        ),
-      );
+    overrides: [sharedPrefsOverride],
+    child: MaterialApp(
+      locale: const Locale('en'),
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [Locale('en', ''), Locale('th', '')],
+      home: child,
+    ),
+  );
 
   testWidgets('Counter increments smoke test', (tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(
-      buildTestApp(child: const HomePage()),
-    );
+    await tester.pumpWidget(buildTestApp(child: const HomePage()));
     await tester.pumpAndSettle();
 
     // Verify that our counter starts at 0.
@@ -70,9 +60,7 @@ void main() {
   testWidgets('Counter decrements when decrease button is pressed', (
     tester,
   ) async {
-    await tester.pumpWidget(
-      buildTestApp(child: const HomePage()),
-    );
+    await tester.pumpWidget(buildTestApp(child: const HomePage()));
     await tester.pumpAndSettle();
 
     // Increment first
@@ -88,12 +76,8 @@ void main() {
     expect(find.text('0'), findsOneWidget);
   });
 
-  testWidgets('Counter resets when reset button is pressed', (
-    tester,
-  ) async {
-    await tester.pumpWidget(
-      buildTestApp(child: const HomePage()),
-    );
+  testWidgets('Counter resets when reset button is pressed', (tester) async {
+    await tester.pumpWidget(buildTestApp(child: const HomePage()));
     await tester.pumpAndSettle();
 
     // Increment a few times
@@ -112,21 +96,15 @@ void main() {
   });
 
   testWidgets('Home page shows welcome message', (tester) async {
-    await tester.pumpWidget(
-      buildTestApp(child: const HomePage()),
-    );
+    await tester.pumpWidget(buildTestApp(child: const HomePage()));
     await tester.pumpAndSettle();
 
     // Verify welcome message is displayed
     expect(find.text('Welcome'), findsOneWidget);
   });
 
-  testWidgets('Settings button navigates correctly', (
-    tester,
-  ) async {
-    await tester.pumpWidget(
-      buildTestApp(child: const HomePage()),
-    );
+  testWidgets('Settings button navigates correctly', (tester) async {
+    await tester.pumpWidget(buildTestApp(child: const HomePage()));
     await tester.pumpAndSettle();
 
     // Verify settings icon exists (in app bar)

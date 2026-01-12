@@ -1,6 +1,6 @@
 # Flutter MVVM Clean Architecture Template
 
-A production-ready Flutter project template implementing **MVVM Clean Architecture** with comprehensive features including theme management, localization, CI/CD, and testing infrastructure.
+A production-ready Flutter project template implementing **MVVM Clean Architecture** with **Riverpod** for both state management and dependency injection.
 
 [![CI](https://github.com/YOUR_USERNAME/flutter_mvvm_clean_template/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR_USERNAME/flutter_mvvm_clean_template/actions/workflows/ci.yml)
 [![Flutter](https://img.shields.io/badge/Flutter-3.38.5-blue.svg)](https://flutter.dev)
@@ -11,7 +11,8 @@ A production-ready Flutter project template implementing **MVVM Clean Architectu
 | Feature | Description |
 |---------|-------------|
 | 🏗️ **Clean Architecture** | Separation of concerns with Domain, Data, and Presentation layers |
-| 📱 **MVVM Pattern** | ViewModels with Riverpod for reactive state management |
+| 📱 **MVVM Pattern** | ViewModels with Riverpod Notifiers for reactive state management |
+| 💉 **Riverpod DI** | Single, unified dependency injection using Riverpod providers |
 | 🌍 **Multi-Environment** | Dev, Staging, and Production configurations |
 | 🎨 **Theme System** | Light/Dark/System themes with Material 3 |
 | 🌐 **Localization** | English & Thai with type-safe translations |
@@ -30,8 +31,7 @@ lib/
 │   │   └── env_config.dart         # Environment-specific config
 │   ├── constants/                  # Application constants
 │   ├── di/                         # Dependency injection
-│   │   ├── providers.dart          # Riverpod provider exports
-│   │   └── service_locator.dart    # GetIt service locator
+│   │   └── providers.dart          # All Riverpod providers
 │   ├── errors/                     # Exception & Failure classes
 │   ├── extensions/                 # Dart extension methods
 │   ├── lifecycle/                  # App lifecycle handling
@@ -71,7 +71,7 @@ lib/
 │  │ (Screens)   │◄─│  (Notifier) │  │   (Reusable UI)     │  │
 │  └─────────────┘  └──────┬──────┘  └─────────────────────┘  │
 └──────────────────────────┼──────────────────────────────────┘
-                           │
+                           │ ref.watch / ref.read
 ┌──────────────────────────▼──────────────────────────────────┐
 │                      DOMAIN LAYER                            │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐  │
@@ -79,7 +79,7 @@ lib/
 │  │  (Models)   │  │  (Business) │  │   (Interface)       │  │
 │  └─────────────┘  └──────┬──────┘  └─────────────────────┘  │
 └──────────────────────────┼──────────────────────────────────┘
-                           │
+                           │ Provider dependencies
 ┌──────────────────────────▼──────────────────────────────────┐
 │                       DATA LAYER                             │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐  │
@@ -129,9 +129,63 @@ flutter run -t lib/main_prod.dart --release
 flutter run
 ```
 
+## 💉 Dependency Injection with Riverpod
+
+All dependencies are managed through Riverpod providers in `lib/core/di/providers.dart`:
+
+```dart
+// External dependencies
+final sharedPreferencesProvider = Provider<SharedPreferences>(...);
+final httpClientProvider = Provider<http.Client>(...);
+
+// Core services
+final apiClientProvider = Provider<ApiClient>(...);
+final networkInfoProvider = Provider<NetworkInfo>(...);
+
+// Repositories
+final userRepositoryProvider = Provider<UserRepository>(...);
+
+// Use Cases
+final getCurrentUserUseCaseProvider = Provider<GetCurrentUserUseCase>(...);
+
+// ViewModels (Notifiers)
+final settingsProvider = NotifierProvider<SettingsNotifier, SettingsState>(...);
+```
+
+### Using Providers in Widgets
+
+```dart
+class MyPage extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Watch reactive state
+    final settings = ref.watch(settingsProvider);
+    
+    // Read use case (non-reactive)
+    final useCase = ref.read(getCurrentUserUseCaseProvider);
+    
+    // Call notifier methods
+    ref.read(settingsProvider.notifier).toggleTheme();
+  }
+}
+```
+
+### Using Providers in Notifiers
+
+```dart
+class UserNotifier extends Notifier<UserState> {
+  @override
+  UserState build() {
+    // Access other providers via ref
+    final useCase = ref.watch(getCurrentUserUseCaseProvider);
+    return const UserState();
+  }
+}
+```
+
 ## 🎨 Theme Management
 
-The app supports Light, Dark, and System themes with Material 3 design:
+The app supports Light, Dark, and System themes with Material 3:
 
 ```dart
 // In any ConsumerWidget
@@ -202,83 +256,37 @@ class ProductModel extends ProductEntity {
 }
 ```
 
-### 3. Define Repository Interface (Domain Layer)
-
-```dart
-// lib/domain/repositories/product_repository.dart
-abstract class ProductRepository {
-  Future<Either<Failure, List<ProductEntity>>> getProducts();
-  Future<Either<Failure, ProductEntity>> getProductById(String id);
-}
-```
-
-### 4. Implement Data Source & Repository (Data Layer)
+### 3. Create Data Source & Repository
 
 ```dart
 // lib/data/datasources/product_remote_datasource.dart
-abstract class ProductRemoteDataSource {
-  Future<List<ProductModel>> getProducts();
-}
-
-class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
-  ProductRemoteDataSourceImpl({required this.apiClient});
-  final ApiClient apiClient;
-  
-  @override
-  Future<List<ProductModel>> getProducts() async {
-    final response = await apiClient.get('/products');
-    return (response.data as List).map((e) => ProductModel.fromJson(e)).toList();
-  }
-}
+final productRemoteDataSourceProvider = Provider<ProductRemoteDataSource>((ref) {
+  final apiClient = ref.watch(apiClientProvider);
+  return ProductRemoteDataSourceImpl(apiClient: apiClient);
+});
 
 // lib/data/repositories/product_repository_impl.dart
-class ProductRepositoryImpl implements ProductRepository {
-  ProductRepositoryImpl({required this.remoteDataSource});
-  final ProductRemoteDataSource remoteDataSource;
-  
-  @override
-  Future<Either<Failure, List<ProductEntity>>> getProducts() async {
-    try {
-      final products = await remoteDataSource.getProducts();
-      return Right(products);
-    } on ServerException {
-      return Left(ServerFailure());
-    }
-  }
-}
+final productRepositoryProvider = Provider<ProductRepository>((ref) {
+  final remoteDataSource = ref.watch(productRemoteDataSourceProvider);
+  final networkInfo = ref.watch(networkInfoProvider);
+  return ProductRepositoryImpl(
+    remoteDataSource: remoteDataSource,
+    networkInfo: networkInfo,
+  );
+});
 ```
 
-### 5. Create Use Case (Domain Layer)
+### 4. Create Use Case
 
 ```dart
 // lib/domain/usecases/get_products_usecase.dart
-class GetProductsUseCase implements UseCase<List<ProductEntity>, NoParams> {
-  GetProductsUseCase({required this.repository});
-  final ProductRepository repository;
-  
-  @override
-  Future<Either<Failure, List<ProductEntity>>> call(NoParams params) =>
-      repository.getProducts();
-}
+final getProductsUseCaseProvider = Provider<GetProductsUseCase>((ref) {
+  final repository = ref.watch(productRepositoryProvider);
+  return GetProductsUseCase(repository: repository);
+});
 ```
 
-### 6. Register Dependencies
-
-```dart
-// lib/core/di/service_locator.dart
-getIt
-  ..registerLazySingleton<ProductRemoteDataSource>(
-    () => ProductRemoteDataSourceImpl(apiClient: getIt<ApiClient>()),
-  )
-  ..registerLazySingleton<ProductRepository>(
-    () => ProductRepositoryImpl(remoteDataSource: getIt<ProductRemoteDataSource>()),
-  )
-  ..registerLazySingleton(
-    () => GetProductsUseCase(repository: getIt<ProductRepository>()),
-  );
-```
-
-### 7. Create ViewModel (Presentation Layer)
+### 5. Create ViewModel (Notifier)
 
 ```dart
 // lib/presentation/viewmodels/product_viewmodel.dart
@@ -290,12 +298,7 @@ class ProductState {
   final bool isLoading;
   final String? error;
   
-  ProductState copyWith({List<ProductEntity>? products, bool? isLoading, String? error}) =>
-      ProductState(
-        products: products ?? this.products,
-        isLoading: isLoading ?? this.isLoading,
-        error: error,
-      );
+  ProductState copyWith({...}) => ProductState(...);
 }
 
 class ProductNotifier extends Notifier<ProductState> {
@@ -305,7 +308,8 @@ class ProductNotifier extends Notifier<ProductState> {
   Future<void> loadProducts() async {
     state = state.copyWith(isLoading: true, error: null);
     
-    final result = await getIt<GetProductsUseCase>().call(NoParams());
+    final useCase = ref.read(getProductsUseCaseProvider);
+    final result = await useCase.call(NoParams());
     
     result.fold(
       (failure) => state = state.copyWith(isLoading: false, error: failure.message),
@@ -317,10 +321,9 @@ class ProductNotifier extends Notifier<ProductState> {
 final productProvider = NotifierProvider<ProductNotifier, ProductState>(ProductNotifier.new);
 ```
 
-### 8. Create Page (Presentation Layer)
+### 6. Use in Widget
 
 ```dart
-// lib/presentation/pages/product_page.dart
 class ProductPage extends ConsumerWidget {
   const ProductPage({super.key});
   
@@ -329,20 +332,12 @@ class ProductPage extends ConsumerWidget {
     final state = ref.watch(productProvider);
     
     return Scaffold(
-      appBar: AppBar(title: const Text('Products')),
-      body: AsyncValueWidget(
-        isLoading: state.isLoading,
-        error: state.error,
-        data: state.products,
-        builder: (products) => ListView.builder(
-          itemCount: products.length,
-          itemBuilder: (_, i) => ListTile(
-            title: Text(products[i].name),
-            trailing: Text('\$${products[i].price}'),
-          ),
-        ),
-        onRetry: () => ref.read(productProvider.notifier).loadProducts(),
-      ),
+      body: state.isLoading
+          ? const CircularProgressIndicator()
+          : ListView.builder(
+              itemCount: state.products.length,
+              itemBuilder: (_, i) => ListTile(title: Text(state.products[i].name)),
+            ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => ref.read(productProvider.notifier).loadProducts(),
         child: const Icon(Icons.refresh),
@@ -373,30 +368,30 @@ flutter test --tags=golden
 flutter test --tags=golden --update-goldens
 ```
 
+### Testing with Provider Overrides
+
+```dart
+// Create a test container with mock providers
+final container = ProviderContainer(
+  overrides: [
+    sharedPreferencesProvider.overrideWithValue(mockPrefs),
+    userRepositoryProvider.overrideWithValue(mockRepository),
+  ],
+);
+
+// Use in widget tests
+await tester.pumpWidget(
+  ProviderScope(
+    overrides: [sharedPreferencesProvider.overrideWithValue(mockPrefs)],
+    child: const MyApp(),
+  ),
+);
+```
+
 ### Generate Mocks
 
 ```bash
 dart run build_runner build --delete-conflicting-outputs
-```
-
-### Test Structure
-
-```
-test/
-├── core/
-│   └── network/
-│       └── api_client_test.dart      # API client unit tests
-├── presentation/
-│   └── viewmodels/
-│       └── settings_viewmodel_test.dart
-├── golden/
-│   ├── pages/                        # Page golden tests
-│   │   └── goldens/ci/               # CI-compatible golden images
-│   └── widgets/                      # Widget golden tests
-├── helpers/
-│   └── test_helpers.dart             # Test utilities & mocks
-├── flutter_test_config.dart          # Alchemist configuration
-└── widget_test.dart                  # Widget integration tests
 ```
 
 ## 🚀 CI/CD
@@ -456,9 +451,8 @@ flutter build ios --release
 
 | Package | Purpose |
 |---------|---------|
-| `flutter_riverpod` | State management with compile-time safety |
+| `flutter_riverpod` | State management & Dependency injection |
 | `go_router` | Declarative routing |
-| `get_it` | Service locator for dependency injection |
 
 ### Network & Storage
 

@@ -2,36 +2,47 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mvvm_clean_template/core/di/providers.dart';
 import 'package:mvvm_clean_template/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// Creates mock SharedPreferences and returns provider override
+Future<Override> createSharedPreferencesOverride({
+  Map<String, Object>? values,
+}) async {
+  SharedPreferences.setMockInitialValues(values ?? {});
+  final prefs = await SharedPreferences.getInstance();
+  return sharedPreferencesProvider.overrideWithValue(prefs);
+}
+
 /// Creates a test wrapper widget with all necessary providers and localizations
 class TestWrapper extends StatelessWidget {
-
   const TestWrapper({
-    required this.child, super.key,
+    required this.child,
+    super.key,
     this.overrides = const [],
     this.locale,
   });
+
   final Widget child;
   final List<Override> overrides;
   final Locale? locale;
 
   @override
   Widget build(BuildContext context) => ProviderScope(
-      overrides: overrides,
-      child: MaterialApp(
-        locale: locale ?? const Locale('en'),
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [Locale('en', ''), Locale('th', '')],
-        home: child,
-      ),
-    );
+        overrides: overrides,
+        child: MaterialApp(
+          locale: locale ?? const Locale('en'),
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [Locale('en', ''), Locale('th', '')],
+          home: child,
+        ),
+      );
 }
 
 /// Helper to pump widget with all necessary setup
@@ -41,9 +52,13 @@ Future<void> pumpTestWidget(
   List<Override>? overrides,
   Locale? locale,
 }) async {
+  // Create SharedPreferences override if not provided
+  final prefsOverride = await createSharedPreferencesOverride();
+  final allOverrides = [prefsOverride, ...?overrides];
+
   await tester.pumpWidget(
     TestWrapper(
-      overrides: overrides ?? [],
+      overrides: allOverrides,
       locale: locale,
       child: widget,
     ),
@@ -60,11 +75,16 @@ Future<SharedPreferences> createMockSharedPreferences({
 }
 
 /// Create a ProviderContainer for testing with optional overrides
-ProviderContainer createTestContainer({
+Future<ProviderContainer> createTestContainer({
   List<Override>? overrides,
-}) => ProviderContainer(
-    overrides: overrides ?? [],
+  Map<String, Object>? sharedPrefsValues,
+}) async {
+  final prefsOverride =
+      await createSharedPreferencesOverride(values: sharedPrefsValues);
+  return ProviderContainer(
+    overrides: [prefsOverride, ...?overrides],
   );
+}
 
 /// Extension methods for easier testing
 extension WidgetTesterExtensions on WidgetTester {

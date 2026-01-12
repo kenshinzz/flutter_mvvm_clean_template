@@ -3,8 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:mvvm_clean_template/core/di/service_locator.dart';
-import 'package:mvvm_clean_template/presentation/viewmodels/settings_viewmodel.dart';
+import 'package:mvvm_clean_template/core/di/providers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'settings_viewmodel_test.mocks.dart';
@@ -24,21 +23,16 @@ void main() {
     ).thenAnswer((_) async => true);
     when(mockSharedPreferences.remove(any)).thenAnswer((_) async => true);
 
-    // Register mock SharedPreferences with GetIt
-    if (getIt.isRegistered<SharedPreferences>()) {
-      getIt.unregister<SharedPreferences>();
-    }
-    getIt.registerSingleton<SharedPreferences>(mockSharedPreferences);
-
-    // Create a new container for each test
-    container = ProviderContainer();
+    // Create a new container with overridden SharedPreferences
+    container = ProviderContainer(
+      overrides: [
+        sharedPreferencesProvider.overrideWithValue(mockSharedPreferences),
+      ],
+    );
   });
 
   tearDown(() {
     container.dispose();
-    if (getIt.isRegistered<SharedPreferences>()) {
-      getIt.unregister<SharedPreferences>();
-    }
   });
 
   group('SettingsNotifier', () {
@@ -62,7 +56,9 @@ void main() {
     group('Theme Mode', () {
       test('should change theme mode to dark', () async {
         // Act
-        await container.read(settingsProvider.notifier).setThemeMode(ThemeMode.dark);
+        await container
+            .read(settingsProvider.notifier)
+            .setThemeMode(ThemeMode.dark);
 
         // Assert
         final state = container.read(settingsProvider);
@@ -73,7 +69,9 @@ void main() {
 
       test('should change theme mode to light', () async {
         // Act
-        await container.read(settingsProvider.notifier).setThemeMode(ThemeMode.light);
+        await container
+            .read(settingsProvider.notifier)
+            .setThemeMode(ThemeMode.light);
 
         // Assert
         final state = container.read(settingsProvider);
@@ -100,7 +98,9 @@ void main() {
 
       test('should persist theme mode to SharedPreferences', () async {
         // Act
-        await container.read(settingsProvider.notifier).setThemeMode(ThemeMode.dark);
+        await container
+            .read(settingsProvider.notifier)
+            .setThemeMode(ThemeMode.dark);
 
         // Assert
         verify(
@@ -129,7 +129,9 @@ void main() {
     group('Locale', () {
       test('should change locale to Thai', () async {
         // Act
-        await container.read(settingsProvider.notifier).setLocale(const Locale('th'));
+        await container
+            .read(settingsProvider.notifier)
+            .setLocale(const Locale('th'));
 
         // Assert
         final state = container.read(settingsProvider);
@@ -153,7 +155,9 @@ void main() {
 
       test('should persist locale to SharedPreferences', () async {
         // Act
-        await container.read(settingsProvider.notifier).setLocale(const Locale('th'));
+        await container
+            .read(settingsProvider.notifier)
+            .setLocale(const Locale('th'));
 
         // Assert
         verify(mockSharedPreferences.setString('locale', 'th')).called(1);
@@ -216,7 +220,11 @@ void main() {
         ).thenReturn(ThemeMode.dark.toString());
 
         // Create a new container to trigger fresh build
-        final newContainer = ProviderContainer();
+        final newContainer = ProviderContainer(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(mockSharedPreferences),
+          ],
+        );
         addTearDown(newContainer.dispose);
 
         // Assert
@@ -228,7 +236,11 @@ void main() {
         when(mockSharedPreferences.getString('locale')).thenReturn('th');
 
         // Create a new container to trigger fresh build
-        final newContainer = ProviderContainer();
+        final newContainer = ProviderContainer(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(mockSharedPreferences),
+          ],
+        );
         addTearDown(newContainer.dispose);
 
         // Assert
@@ -247,7 +259,9 @@ void main() {
         );
 
         // Act
-        await container.read(settingsProvider.notifier).setThemeMode(ThemeMode.dark);
+        await container
+            .read(settingsProvider.notifier)
+            .setThemeMode(ThemeMode.dark);
 
         // Assert - state should have been updated
         expect(updateCount, greaterThan(0));
@@ -263,7 +277,9 @@ void main() {
         );
 
         // Act
-        await container.read(settingsProvider.notifier).setLocale(const Locale('th'));
+        await container
+            .read(settingsProvider.notifier)
+            .setLocale(const Locale('th'));
 
         // Assert - state should have been updated
         expect(updateCount, greaterThan(0));

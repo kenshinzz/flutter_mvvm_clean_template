@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mvvm_clean_template/core/di/service_locator.dart';
+import 'package:mvvm_clean_template/core/di/providers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// State class for settings
@@ -42,7 +42,8 @@ class SettingsNotifier extends Notifier<SettingsState> {
 
   @override
   SettingsState build() {
-    _sharedPreferences = getIt<SharedPreferences>();
+    // Get SharedPreferences from Riverpod provider
+    _sharedPreferences = ref.watch(sharedPreferencesProvider);
 
     // Load settings synchronously from SharedPreferences
     final themeModeString = _sharedPreferences.getString(_themeModeKey);
@@ -89,19 +90,13 @@ class SettingsNotifier extends Notifier<SettingsState> {
   }
 
   /// Set light theme
-  Future<void> setLightTheme() async {
-    await setThemeMode(ThemeMode.light);
-  }
+  Future<void> setLightTheme() => setThemeMode(ThemeMode.light);
 
   /// Set dark theme
-  Future<void> setDarkTheme() async {
-    await setThemeMode(ThemeMode.dark);
-  }
+  Future<void> setDarkTheme() => setThemeMode(ThemeMode.dark);
 
   /// Set system theme
-  Future<void> setSystemTheme() async {
-    await setThemeMode(ThemeMode.system);
-  }
+  Future<void> setSystemTheme() => setThemeMode(ThemeMode.system);
 
   /// Set locale (language)
   Future<void> setLocale(Locale locale) async {
@@ -126,14 +121,10 @@ class SettingsNotifier extends Notifier<SettingsState> {
   }
 
   /// Set English locale
-  Future<void> setEnglish() async {
-    await setLocale(const Locale('en'));
-  }
+  Future<void> setEnglish() => setLocale(const Locale('en'));
 
   /// Set Thai locale
-  Future<void> setThai() async {
-    await setLocale(const Locale('th'));
-  }
+  Future<void> setThai() => setLocale(const Locale('th'));
 
   /// Reset settings to default
   Future<void> resetSettings() async {
