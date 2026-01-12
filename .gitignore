@@ -12,6 +12,9 @@
 .swiftpm/
 migrate_working_dir/
 
+# AI Assistant context files
+CLAUDE.md
+
 # IntelliJ related
 *.iml
 *.ipr

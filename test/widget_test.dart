@@ -6,30 +6,51 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mvvm_clean_template/core/di/service_locator.dart';
+import 'package:mvvm_clean_template/l10n/app_localizations.dart';
 import 'package:mvvm_clean_template/presentation/pages/home_page.dart';
-import 'package:mvvm_clean_template/presentation/viewmodels/settings_viewmodel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'helpers/test_helpers.dart';
-
 void main() {
-  late SettingsViewModel settingsViewModel;
-
   setUp(() async {
     // Set up mock SharedPreferences
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
-    settingsViewModel = SettingsViewModel(sharedPreferences: prefs);
+
+    // Register SharedPreferences with GetIt
+    if (getIt.isRegistered<SharedPreferences>()) {
+      getIt.unregister<SharedPreferences>();
+    }
+    getIt.registerSingleton<SharedPreferences>(prefs);
   });
+
+  tearDown(() {
+    if (getIt.isRegistered<SharedPreferences>()) {
+      getIt.unregister<SharedPreferences>();
+    }
+  });
+
+  Widget buildTestApp({required Widget child}) => ProviderScope(
+        child: MaterialApp(
+          locale: const Locale('en'),
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [Locale('en', ''), Locale('th', '')],
+          home: child,
+        ),
+      );
 
   testWidgets('Counter increments smoke test', (tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(
-      TestWrapper(
-        settingsViewModel: settingsViewModel,
-        child: const HomePage(),
-      ),
+      buildTestApp(child: const HomePage()),
     );
     await tester.pumpAndSettle();
 
@@ -50,10 +71,7 @@ void main() {
     tester,
   ) async {
     await tester.pumpWidget(
-      TestWrapper(
-        settingsViewModel: settingsViewModel,
-        child: const HomePage(),
-      ),
+      buildTestApp(child: const HomePage()),
     );
     await tester.pumpAndSettle();
 
@@ -74,10 +92,7 @@ void main() {
     tester,
   ) async {
     await tester.pumpWidget(
-      TestWrapper(
-        settingsViewModel: settingsViewModel,
-        child: const HomePage(),
-      ),
+      buildTestApp(child: const HomePage()),
     );
     await tester.pumpAndSettle();
 
@@ -98,10 +113,7 @@ void main() {
 
   testWidgets('Home page shows welcome message', (tester) async {
     await tester.pumpWidget(
-      TestWrapper(
-        settingsViewModel: settingsViewModel,
-        child: const HomePage(),
-      ),
+      buildTestApp(child: const HomePage()),
     );
     await tester.pumpAndSettle();
 
@@ -113,10 +125,7 @@ void main() {
     tester,
   ) async {
     await tester.pumpWidget(
-      TestWrapper(
-        settingsViewModel: settingsViewModel,
-        child: const HomePage(),
-      ),
+      buildTestApp(child: const HomePage()),
     );
     await tester.pumpAndSettle();
 

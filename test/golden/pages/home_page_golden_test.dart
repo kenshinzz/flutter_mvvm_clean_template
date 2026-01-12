@@ -3,12 +3,13 @@ library;
 
 import 'package:alchemist/alchemist.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mvvm_clean_template/core/di/service_locator.dart';
+import 'package:mvvm_clean_template/l10n/app_localizations.dart';
 import 'package:mvvm_clean_template/presentation/pages/home_page.dart';
-import 'package:mvvm_clean_template/presentation/viewmodels/settings_viewmodel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../helpers/test_helpers.dart';
 
 void main() {
   goldenTest(
@@ -55,15 +56,29 @@ Widget _buildHomePage(ThemeMode themeMode, Locale locale) {
         return const SizedBox.shrink();
       }
 
-      final viewModel = SettingsViewModel(sharedPreferences: snapshot.data!);
+      // Register SharedPreferences with GetIt for the test
+      if (!getIt.isRegistered<SharedPreferences>()) {
+        getIt.registerSingleton<SharedPreferences>(snapshot.data!);
+      }
 
       return SizedBox(
         width: 400,
         height: 800,
-        child: TestWrapper(
-          settingsViewModel: viewModel,
-          locale: locale,
-          child: const HomePage(),
+        child: ProviderScope(
+          child: MaterialApp(
+            locale: locale,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [Locale('en', ''), Locale('th', '')],
+            themeMode: themeMode,
+            theme: ThemeData.light(useMaterial3: true),
+            darkTheme: ThemeData.dark(useMaterial3: true),
+            home: const HomePage(),
+          ),
         ),
       );
     },

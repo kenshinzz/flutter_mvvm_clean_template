@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mvvm_clean_template/core/di/providers.dart';
 import 'package:mvvm_clean_template/l10n/app_localizations.dart';
-import 'package:mvvm_clean_template/presentation/viewmodels/settings_viewmodel.dart';
-import 'package:provider/provider.dart';
 
 /// Settings page for theme and language configuration
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final settingsViewModel = context.watch<SettingsViewModel>();
+    final settings = ref.watch(settingsProvider);
+    final settingsNotifier = ref.read(settingsProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -27,13 +28,13 @@ class SettingsPage extends StatelessWidget {
           // Theme Section
           _buildSectionHeader(context, l10n.theme, Icons.palette),
           const SizedBox(height: 8),
-          _buildThemeCard(context, settingsViewModel, l10n),
+          _buildThemeCard(context, settings, settingsNotifier, l10n),
           const SizedBox(height: 24),
 
           // Language Section
           _buildSectionHeader(context, l10n.language, Icons.language),
           const SizedBox(height: 8),
-          _buildLanguageCard(context, settingsViewModel, l10n),
+          _buildLanguageCard(context, settings, settingsNotifier, l10n),
           const SizedBox(height: 24),
 
           // About Section
@@ -45,7 +46,7 @@ class SettingsPage extends StatelessWidget {
           // Reset Button
           Center(
             child: OutlinedButton.icon(
-              onPressed: () => _showResetDialog(context, settingsViewModel, l10n),
+              onPressed: () => _showResetDialog(context, settingsNotifier, l10n),
               icon: const Icon(Icons.restore),
               label: Text(l10n.resetToDefaults),
               style: OutlinedButton.styleFrom(
@@ -78,7 +79,12 @@ class SettingsPage extends StatelessWidget {
       ],
     );
 
-  Widget _buildThemeCard(BuildContext context, SettingsViewModel viewModel, AppLocalizations l10n) => Card(
+  Widget _buildThemeCard(
+    BuildContext context,
+    SettingsState settings,
+    SettingsNotifier notifier,
+    AppLocalizations l10n,
+  ) => Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -92,29 +98,29 @@ class SettingsPage extends StatelessWidget {
             const SizedBox(height: 16),
             _buildThemeOption(
               context,
-              viewModel,
+              settings,
+              notifier,
               ThemeMode.light,
               l10n.themeLight,
               Icons.light_mode,
-              l10n,
             ),
             const SizedBox(height: 8),
             _buildThemeOption(
               context,
-              viewModel,
+              settings,
+              notifier,
               ThemeMode.dark,
               l10n.themeDark,
               Icons.dark_mode,
-              l10n,
             ),
             const SizedBox(height: 8),
             _buildThemeOption(
               context,
-              viewModel,
+              settings,
+              notifier,
               ThemeMode.system,
               l10n.themeSystem,
               Icons.brightness_auto,
-              l10n,
             ),
             const SizedBox(height: 16),
             const Divider(),
@@ -128,8 +134,8 @@ class SettingsPage extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 Switch(
-                  value: viewModel.isDarkMode,
-                  onChanged: (value) => viewModel.toggleTheme(),
+                  value: settings.isDarkMode,
+                  onChanged: (value) => notifier.toggleTheme(),
                   thumbIcon: WidgetStateProperty.resolveWith((states) {
                     if (states.contains(WidgetState.selected)) {
                       return const Icon(Icons.dark_mode);
@@ -146,16 +152,16 @@ class SettingsPage extends StatelessWidget {
 
   Widget _buildThemeOption(
     BuildContext context,
-    SettingsViewModel viewModel,
+    SettingsState settings,
+    SettingsNotifier notifier,
     ThemeMode mode,
     String title,
     IconData icon,
-    AppLocalizations l10n,
   ) {
-    final isSelected = viewModel.themeMode == mode;
+    final isSelected = settings.themeMode == mode;
 
     return InkWell(
-      onTap: () => viewModel.setThemeMode(mode),
+      onTap: () => notifier.setThemeMode(mode),
       borderRadius: BorderRadius.circular(8),
       child: Container(
         padding: const EdgeInsets.all(12),
@@ -201,7 +207,11 @@ class SettingsPage extends StatelessWidget {
   }
 
   Widget _buildLanguageCard(
-      BuildContext context, SettingsViewModel viewModel, AppLocalizations l10n) => Card(
+    BuildContext context,
+    SettingsState settings,
+    SettingsNotifier notifier,
+    AppLocalizations l10n,
+  ) => Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -214,7 +224,8 @@ class SettingsPage extends StatelessWidget {
             const SizedBox(height: 16),
             _buildLanguageOption(
               context,
-              viewModel,
+              settings,
+              notifier,
               const Locale('en'),
               l10n.languageEnglish,
               'EN',
@@ -222,7 +233,8 @@ class SettingsPage extends StatelessWidget {
             const SizedBox(height: 8),
             _buildLanguageOption(
               context,
-              viewModel,
+              settings,
+              notifier,
               const Locale('th'),
               l10n.languageThai,
               'TH',
@@ -239,10 +251,10 @@ class SettingsPage extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 ElevatedButton.icon(
-                  onPressed: () => viewModel.toggleLanguage(),
+                  onPressed: () => notifier.toggleLanguage(),
                   icon: const Icon(Icons.swap_horiz),
                   label: Text(
-                    viewModel.locale.languageCode == 'en' ? 'EN' : 'TH',
+                    settings.locale.languageCode == 'en' ? 'EN' : 'TH',
                   ),
                 ),
               ],
@@ -254,15 +266,16 @@ class SettingsPage extends StatelessWidget {
 
   Widget _buildLanguageOption(
     BuildContext context,
-    SettingsViewModel viewModel,
+    SettingsState settings,
+    SettingsNotifier notifier,
     Locale locale,
     String title,
     String code,
   ) {
-    final isSelected = viewModel.locale == locale;
+    final isSelected = settings.locale == locale;
 
     return InkWell(
-      onTap: () => viewModel.setLocale(locale),
+      onTap: () => notifier.setLocale(locale),
       borderRadius: BorderRadius.circular(8),
       child: Container(
         padding: const EdgeInsets.all(12),
@@ -360,7 +373,7 @@ class SettingsPage extends StatelessWidget {
                   avatar: Icon(Icons.route, size: 18),
                 ),
                 Chip(
-                  label: Text('Provider'),
+                  label: Text('Riverpod'),
                   avatar: Icon(Icons.inventory, size: 18),
                 ),
               ],
@@ -371,7 +384,7 @@ class SettingsPage extends StatelessWidget {
     );
 
   void _showResetDialog(
-      BuildContext context, SettingsViewModel viewModel, AppLocalizations l10n) {
+      BuildContext context, SettingsNotifier notifier, AppLocalizations l10n) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -384,7 +397,7 @@ class SettingsPage extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              viewModel.resetSettings();
+              notifier.resetSettings();
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(

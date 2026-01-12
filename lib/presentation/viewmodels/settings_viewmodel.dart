@@ -1,69 +1,76 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mvvm_clean_template/core/di/service_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// ViewModel for managing app settings (theme mode and locale)
-class SettingsViewModel extends ChangeNotifier {
+/// State class for settings
+@immutable
+class SettingsState {
+  const SettingsState({
+    this.themeMode = ThemeMode.system,
+    this.locale = const Locale('en'),
+    this.isLoading = false,
+  });
 
-  SettingsViewModel({
-    required SharedPreferences sharedPreferences,
-  }) : _sharedPreferences = sharedPreferences {
-    _loadSettings();
-  }
-  final SharedPreferences _sharedPreferences;
+  final ThemeMode themeMode;
+  final Locale locale;
+  final bool isLoading;
 
+  bool get isDarkMode => themeMode == ThemeMode.dark;
+  bool get isLightMode => themeMode == ThemeMode.light;
+  bool get isSystemMode => themeMode == ThemeMode.system;
+
+  SettingsState copyWith({
+    ThemeMode? themeMode,
+    Locale? locale,
+    bool? isLoading,
+  }) =>
+      SettingsState(
+        themeMode: themeMode ?? this.themeMode,
+        locale: locale ?? this.locale,
+        isLoading: isLoading ?? this.isLoading,
+      );
+}
+
+/// Notifier for managing app settings (theme mode and locale)
+class SettingsNotifier extends Notifier<SettingsState> {
   // Keys for SharedPreferences
   static const String _themeModeKey = 'theme_mode';
   static const String _localeKey = 'locale';
 
-  // Private state
-  ThemeMode _themeMode = ThemeMode.system;
-  Locale _locale = const Locale('en');
+  late final SharedPreferences _sharedPreferences;
 
-  // Loading state
-  bool _isLoading = false;
+  @override
+  SettingsState build() {
+    _sharedPreferences = getIt<SharedPreferences>();
 
-  // Getters
-  ThemeMode get themeMode => _themeMode;
-  Locale get locale => _locale;
-  bool get isLoading => _isLoading;
-  bool get isDarkMode => _themeMode == ThemeMode.dark;
-  bool get isLightMode => _themeMode == ThemeMode.light;
-  bool get isSystemMode => _themeMode == ThemeMode.system;
-
-  /// Load settings from SharedPreferences
-  Future<void> _loadSettings() async {
-    _isLoading = true;
-    notifyListeners();
-
-    try {
-      // Load theme mode
-      final themeModeString = _sharedPreferences.getString(_themeModeKey);
-      if (themeModeString != null) {
-        _themeMode = ThemeMode.values.firstWhere(
-          (mode) => mode.toString() == themeModeString,
-          orElse: () => ThemeMode.system,
-        );
-      }
-
-      // Load locale
-      final localeString = _sharedPreferences.getString(_localeKey);
-      if (localeString != null) {
-        _locale = Locale(localeString);
-      }
-    } catch (e) {
-      debugPrint('Error loading settings: $e');
-    } finally {
-      _isLoading = false;
-      notifyListeners();
+    // Load settings synchronously from SharedPreferences
+    final themeModeString = _sharedPreferences.getString(_themeModeKey);
+    var themeMode = ThemeMode.system;
+    if (themeModeString != null) {
+      themeMode = ThemeMode.values.firstWhere(
+        (mode) => mode.toString() == themeModeString,
+        orElse: () => ThemeMode.system,
+      );
     }
+
+    final localeString = _sharedPreferences.getString(_localeKey);
+    var locale = const Locale('en');
+    if (localeString != null) {
+      locale = Locale(localeString);
+    }
+
+    return SettingsState(
+      themeMode: themeMode,
+      locale: locale,
+    );
   }
 
   /// Set theme mode
   Future<void> setThemeMode(ThemeMode mode) async {
-    if (_themeMode == mode) return;
+    if (state.themeMode == mode) return;
 
-    _themeMode = mode;
-    notifyListeners();
+    state = state.copyWith(themeMode: mode);
 
     try {
       await _sharedPreferences.setString(_themeModeKey, mode.toString());
@@ -74,7 +81,7 @@ class SettingsViewModel extends ChangeNotifier {
 
   /// Toggle between light and dark theme
   Future<void> toggleTheme() async {
-    if (_themeMode == ThemeMode.light) {
+    if (state.themeMode == ThemeMode.light) {
       await setThemeMode(ThemeMode.dark);
     } else {
       await setThemeMode(ThemeMode.light);
@@ -98,10 +105,9 @@ class SettingsViewModel extends ChangeNotifier {
 
   /// Set locale (language)
   Future<void> setLocale(Locale locale) async {
-    if (_locale == locale) return;
+    if (state.locale == locale) return;
 
-    _locale = locale;
-    notifyListeners();
+    state = state.copyWith(locale: locale);
 
     try {
       await _sharedPreferences.setString(_localeKey, locale.languageCode);
@@ -112,7 +118,7 @@ class SettingsViewModel extends ChangeNotifier {
 
   /// Toggle between English and Thai
   Future<void> toggleLanguage() async {
-    if (_locale.languageCode == 'en') {
+    if (state.locale.languageCode == 'en') {
       await setLocale(const Locale('th'));
     } else {
       await setLocale(const Locale('en'));
@@ -131,9 +137,7 @@ class SettingsViewModel extends ChangeNotifier {
 
   /// Reset settings to default
   Future<void> resetSettings() async {
-    _themeMode = ThemeMode.system;
-    _locale = const Locale('en');
-    notifyListeners();
+    state = const SettingsState();
 
     try {
       await _sharedPreferences.remove(_themeModeKey);
@@ -143,3 +147,7 @@ class SettingsViewModel extends ChangeNotifier {
     }
   }
 }
+
+/// Provider for SettingsNotifier
+final settingsProvider =
+    NotifierProvider<SettingsNotifier, SettingsState>(SettingsNotifier.new);

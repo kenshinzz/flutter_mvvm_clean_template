@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mvvm_clean_template/l10n/app_localizations.dart';
-import 'package:mvvm_clean_template/presentation/viewmodels/settings_viewmodel.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Creates a test wrapper widget with all necessary providers and localizations
@@ -11,29 +10,27 @@ class TestWrapper extends StatelessWidget {
 
   const TestWrapper({
     required this.child, super.key,
-    this.settingsViewModel,
+    this.overrides = const [],
     this.locale,
   });
   final Widget child;
-  final SettingsViewModel? settingsViewModel;
+  final List<Override> overrides;
   final Locale? locale;
 
   @override
-  Widget build(BuildContext context) => MaterialApp(
-      locale: locale ?? const Locale('en'),
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [Locale('en', ''), Locale('th', '')],
-      home: settingsViewModel != null
-          ? ChangeNotifierProvider<SettingsViewModel>.value(
-              value: settingsViewModel!,
-              child: child,
-            )
-          : child,
+  Widget build(BuildContext context) => ProviderScope(
+      overrides: overrides,
+      child: MaterialApp(
+        locale: locale ?? const Locale('en'),
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [Locale('en', ''), Locale('th', '')],
+        home: child,
+      ),
     );
 }
 
@@ -41,12 +38,12 @@ class TestWrapper extends StatelessWidget {
 Future<void> pumpTestWidget(
   WidgetTester tester,
   Widget widget, {
-  SettingsViewModel? settingsViewModel,
+  List<Override>? overrides,
   Locale? locale,
 }) async {
   await tester.pumpWidget(
     TestWrapper(
-      settingsViewModel: settingsViewModel,
+      overrides: overrides ?? [],
       locale: locale,
       child: widget,
     ),
@@ -61,6 +58,13 @@ Future<SharedPreferences> createMockSharedPreferences({
   SharedPreferences.setMockInitialValues(values ?? {});
   return SharedPreferences.getInstance();
 }
+
+/// Create a ProviderContainer for testing with optional overrides
+ProviderContainer createTestContainer({
+  List<Override>? overrides,
+}) => ProviderContainer(
+    overrides: overrides ?? [],
+  );
 
 /// Extension methods for easier testing
 extension WidgetTesterExtensions on WidgetTester {

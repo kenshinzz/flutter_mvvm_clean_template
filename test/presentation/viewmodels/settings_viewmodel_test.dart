@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:mvvm_clean_template/core/di/service_locator.dart';
 import 'package:mvvm_clean_template/presentation/viewmodels/settings_viewmodel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,7 +11,7 @@ import 'settings_viewmodel_test.mocks.dart';
 
 @GenerateMocks([SharedPreferences])
 void main() {
-  late SettingsViewModel viewModel;
+  late ProviderContainer container;
   late MockSharedPreferences mockSharedPreferences;
 
   setUp(() {
@@ -22,64 +24,83 @@ void main() {
     ).thenAnswer((_) async => true);
     when(mockSharedPreferences.remove(any)).thenAnswer((_) async => true);
 
-    viewModel = SettingsViewModel(sharedPreferences: mockSharedPreferences);
+    // Register mock SharedPreferences with GetIt
+    if (getIt.isRegistered<SharedPreferences>()) {
+      getIt.unregister<SharedPreferences>();
+    }
+    getIt.registerSingleton<SharedPreferences>(mockSharedPreferences);
+
+    // Create a new container for each test
+    container = ProviderContainer();
   });
 
-  group('SettingsViewModel', () {
+  tearDown(() {
+    container.dispose();
+    if (getIt.isRegistered<SharedPreferences>()) {
+      getIt.unregister<SharedPreferences>();
+    }
+  });
+
+  group('SettingsNotifier', () {
     group('Initial State', () {
       test('should have default theme mode as system', () {
-        expect(viewModel.themeMode, ThemeMode.system);
+        final state = container.read(settingsProvider);
+        expect(state.themeMode, ThemeMode.system);
       });
 
       test('should have default locale as English', () {
-        expect(viewModel.locale, const Locale('en'));
+        final state = container.read(settingsProvider);
+        expect(state.locale, const Locale('en'));
       });
 
-      test('should not be loading initially after construction', () async {
-        // Wait for async initialization to complete
-        await Future.delayed(Duration.zero);
-        expect(viewModel.isLoading, false);
+      test('should not be loading initially', () {
+        final state = container.read(settingsProvider);
+        expect(state.isLoading, false);
       });
     });
 
     group('Theme Mode', () {
       test('should change theme mode to dark', () async {
         // Act
-        await viewModel.setThemeMode(ThemeMode.dark);
+        await container.read(settingsProvider.notifier).setThemeMode(ThemeMode.dark);
 
         // Assert
-        expect(viewModel.themeMode, ThemeMode.dark);
-        expect(viewModel.isDarkMode, true);
-        expect(viewModel.isLightMode, false);
+        final state = container.read(settingsProvider);
+        expect(state.themeMode, ThemeMode.dark);
+        expect(state.isDarkMode, true);
+        expect(state.isLightMode, false);
       });
 
       test('should change theme mode to light', () async {
         // Act
-        await viewModel.setThemeMode(ThemeMode.light);
+        await container.read(settingsProvider.notifier).setThemeMode(ThemeMode.light);
 
         // Assert
-        expect(viewModel.themeMode, ThemeMode.light);
-        expect(viewModel.isLightMode, true);
-        expect(viewModel.isDarkMode, false);
+        final state = container.read(settingsProvider);
+        expect(state.themeMode, ThemeMode.light);
+        expect(state.isLightMode, true);
+        expect(state.isDarkMode, false);
       });
 
       test('should toggle between light and dark themes', () async {
+        final notifier = container.read(settingsProvider.notifier);
+
         // Start with light
-        await viewModel.setThemeMode(ThemeMode.light);
-        expect(viewModel.isLightMode, true);
+        await notifier.setThemeMode(ThemeMode.light);
+        expect(container.read(settingsProvider).isLightMode, true);
 
         // Toggle to dark
-        await viewModel.toggleTheme();
-        expect(viewModel.isDarkMode, true);
+        await notifier.toggleTheme();
+        expect(container.read(settingsProvider).isDarkMode, true);
 
         // Toggle back to light
-        await viewModel.toggleTheme();
-        expect(viewModel.isLightMode, true);
+        await notifier.toggleTheme();
+        expect(container.read(settingsProvider).isLightMode, true);
       });
 
       test('should persist theme mode to SharedPreferences', () async {
         // Act
-        await viewModel.setThemeMode(ThemeMode.dark);
+        await container.read(settingsProvider.notifier).setThemeMode(ThemeMode.dark);
 
         // Assert
         verify(
@@ -91,12 +112,14 @@ void main() {
       });
 
       test('should not update if same theme mode', () async {
+        final notifier = container.read(settingsProvider.notifier);
+
         // Arrange
-        await viewModel.setThemeMode(ThemeMode.light);
+        await notifier.setThemeMode(ThemeMode.light);
         clearInteractions(mockSharedPreferences);
 
         // Act
-        await viewModel.setThemeMode(ThemeMode.light);
+        await notifier.setThemeMode(ThemeMode.light);
 
         // Assert - should not call setString again
         verifyNever(mockSharedPreferences.setString(any, any));
@@ -106,70 +129,78 @@ void main() {
     group('Locale', () {
       test('should change locale to Thai', () async {
         // Act
-        await viewModel.setLocale(const Locale('th'));
+        await container.read(settingsProvider.notifier).setLocale(const Locale('th'));
 
         // Assert
-        expect(viewModel.locale, const Locale('th'));
+        final state = container.read(settingsProvider);
+        expect(state.locale, const Locale('th'));
       });
 
       test('should toggle between English and Thai', () async {
+        final notifier = container.read(settingsProvider.notifier);
+
         // Start with English (default)
-        expect(viewModel.locale.languageCode, 'en');
+        expect(container.read(settingsProvider).locale.languageCode, 'en');
 
         // Toggle to Thai
-        await viewModel.toggleLanguage();
-        expect(viewModel.locale.languageCode, 'th');
+        await notifier.toggleLanguage();
+        expect(container.read(settingsProvider).locale.languageCode, 'th');
 
         // Toggle back to English
-        await viewModel.toggleLanguage();
-        expect(viewModel.locale.languageCode, 'en');
+        await notifier.toggleLanguage();
+        expect(container.read(settingsProvider).locale.languageCode, 'en');
       });
 
       test('should persist locale to SharedPreferences', () async {
         // Act
-        await viewModel.setLocale(const Locale('th'));
+        await container.read(settingsProvider.notifier).setLocale(const Locale('th'));
 
         // Assert
         verify(mockSharedPreferences.setString('locale', 'th')).called(1);
       });
 
       test('should set English locale using helper method', () async {
+        final notifier = container.read(settingsProvider.notifier);
+
         // Arrange
-        await viewModel.setThai();
+        await notifier.setThai();
 
         // Act
-        await viewModel.setEnglish();
+        await notifier.setEnglish();
 
         // Assert
-        expect(viewModel.locale.languageCode, 'en');
+        expect(container.read(settingsProvider).locale.languageCode, 'en');
       });
 
       test('should set Thai locale using helper method', () async {
         // Act
-        await viewModel.setThai();
+        await container.read(settingsProvider.notifier).setThai();
 
         // Assert
-        expect(viewModel.locale.languageCode, 'th');
+        expect(container.read(settingsProvider).locale.languageCode, 'th');
       });
     });
 
     group('Reset Settings', () {
       test('should reset to default values', () async {
+        final notifier = container.read(settingsProvider.notifier);
+
         // Arrange - change values first
-        await viewModel.setThemeMode(ThemeMode.dark);
-        await viewModel.setLocale(const Locale('th'));
+        await notifier.setThemeMode(ThemeMode.dark);
+        await notifier.setLocale(const Locale('th'));
 
         // Act
-        await viewModel.resetSettings();
+        await notifier.resetSettings();
 
         // Assert
-        expect(viewModel.themeMode, ThemeMode.system);
-        expect(viewModel.locale, const Locale('en'));
+        final state = container.read(settingsProvider);
+        expect(state.themeMode, ThemeMode.system);
+        expect(state.locale, const Locale('en'));
       });
 
       test('should remove settings from SharedPreferences', () async {
         // Act
-        await viewModel.resetSettings();
+        await container.read(settingsProvider.notifier).resetSettings();
 
         // Assert
         verify(mockSharedPreferences.remove('theme_mode')).called(1);
@@ -179,57 +210,63 @@ void main() {
 
     group('Load Settings', () {
       test('should load saved theme mode from SharedPreferences', () {
-        // Arrange
+        // Arrange - set up mock before creating container
         when(
           mockSharedPreferences.getString('theme_mode'),
         ).thenReturn(ThemeMode.dark.toString());
 
-        // Act - create new instance to trigger load
-        final newViewModel = SettingsViewModel(
-          sharedPreferences: mockSharedPreferences,
-        );
+        // Create a new container to trigger fresh build
+        final newContainer = ProviderContainer();
+        addTearDown(newContainer.dispose);
 
-        // Assert (after async load completes)
-        expect(newViewModel.themeMode, ThemeMode.dark);
+        // Assert
+        expect(newContainer.read(settingsProvider).themeMode, ThemeMode.dark);
       });
 
       test('should load saved locale from SharedPreferences', () {
         // Arrange
         when(mockSharedPreferences.getString('locale')).thenReturn('th');
 
-        // Act - create new instance to trigger load
-        final newViewModel = SettingsViewModel(
-          sharedPreferences: mockSharedPreferences,
-        );
+        // Create a new container to trigger fresh build
+        final newContainer = ProviderContainer();
+        addTearDown(newContainer.dispose);
 
-        // Assert (after async load completes)
-        expect(newViewModel.locale, const Locale('th'));
+        // Assert
+        expect(newContainer.read(settingsProvider).locale, const Locale('th'));
       });
     });
 
-    group('Notifier', () {
-      test('should notify listeners when theme changes', () async {
-        // Arrange
-        var notified = false;
-        viewModel.addListener(() => notified = true);
+    group('State Changes', () {
+      test('should update state when theme changes', () async {
+        var updateCount = 0;
+        container.listen(
+          settingsProvider,
+          (previous, next) {
+            updateCount++;
+          },
+        );
 
         // Act
-        await viewModel.setThemeMode(ThemeMode.dark);
+        await container.read(settingsProvider.notifier).setThemeMode(ThemeMode.dark);
 
-        // Assert
-        expect(notified, true);
+        // Assert - state should have been updated
+        expect(updateCount, greaterThan(0));
       });
 
-      test('should notify listeners when locale changes', () async {
-        // Arrange
-        var notified = false;
-        viewModel.addListener(() => notified = true);
+      test('should update state when locale changes', () async {
+        var updateCount = 0;
+        container.listen(
+          settingsProvider,
+          (previous, next) {
+            updateCount++;
+          },
+        );
 
         // Act
-        await viewModel.setLocale(const Locale('th'));
+        await container.read(settingsProvider.notifier).setLocale(const Locale('th'));
 
-        // Assert
-        expect(notified, true);
+        // Assert - state should have been updated
+        expect(updateCount, greaterThan(0));
       });
     });
   });

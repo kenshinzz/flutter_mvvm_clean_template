@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mvvm_clean_template/core/di/providers.dart';
 import 'package:mvvm_clean_template/core/router/route_names.dart';
 import 'package:mvvm_clean_template/l10n/app_localizations.dart';
-import 'package:mvvm_clean_template/presentation/viewmodels/settings_viewmodel.dart';
-import 'package:provider/provider.dart';
 
 /// Home page with counter example and navigation to other pages
-class HomePage extends StatefulWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends ConsumerState<HomePage> {
   int _counter = 0;
 
   void _incrementCounter() {
@@ -37,7 +37,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final settingsViewModel = context.watch<SettingsViewModel>();
+    final settings = ref.watch(settingsProvider);
+    final settingsNotifier = ref.read(settingsProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -74,7 +75,7 @@ class _HomePageState extends State<HomePage> {
                   child: Column(
                     children: [
                       Icon(
-                        settingsViewModel.isDarkMode
+                        settings.isDarkMode
                             ? Icons.dark_mode
                             : Icons.light_mode,
                         size: 48,
@@ -82,11 +83,11 @@ class _HomePageState extends State<HomePage> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        '${l10n.currentTheme}: ${_getThemeName(l10n, settingsViewModel.themeMode)}',
+                        '${l10n.currentTheme}: ${_getThemeName(l10n, settings.themeMode)}',
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       Text(
-                        '${l10n.currentLanguage}: ${_getLanguageName(l10n, settingsViewModel.locale)}',
+                        '${l10n.currentLanguage}: ${_getLanguageName(l10n, settings.locale)}',
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],
@@ -163,12 +164,12 @@ class _HomePageState extends State<HomePage> {
                     label: Text(l10n.profile),
                   ),
                   OutlinedButton.icon(
-                    onPressed: settingsViewModel.toggleTheme,
+                    onPressed: settingsNotifier.toggleTheme,
                     icon: const Icon(Icons.brightness_6),
                     label: Text(l10n.toggleTheme),
                   ),
                   OutlinedButton.icon(
-                    onPressed: settingsViewModel.toggleLanguage,
+                    onPressed: settingsNotifier.toggleLanguage,
                     icon: const Icon(Icons.language),
                     label: Text(l10n.toggleLanguage),
                   ),
@@ -271,7 +272,7 @@ class _HomePageState extends State<HomePage> {
       children: [
         const Text(
           'A Flutter template project with MVVM Clean Architecture, '
-          'GoRouter for navigation, and Provider for dependency injection.',
+          'GoRouter for navigation, and Riverpod for state management.',
         ),
       ],
     );

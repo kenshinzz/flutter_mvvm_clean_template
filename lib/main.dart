@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mvvm_clean_template/core/di/providers.dart';
 import 'package:mvvm_clean_template/core/di/service_locator.dart';
 import 'package:mvvm_clean_template/core/router/app_router.dart';
 import 'package:mvvm_clean_template/core/theme/app_theme.dart';
 import 'package:mvvm_clean_template/l10n/app_localizations.dart';
-import 'package:mvvm_clean_template/presentation/viewmodels/settings_viewmodel.dart';
-import 'package:provider/provider.dart';
 
 void main() async {
   // Ensure Flutter is initialized
@@ -15,40 +14,41 @@ void main() async {
   // Initialize dependencies (GetIt)
   await initializeDependencies();
 
-  runApp(const MyApp());
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) =>
-      // Wrap the app with MultiProvider for reactive state management
-      MultiProvider(
-        providers: getProviders(),
-        child: Consumer<SettingsViewModel>(
-          builder: (context, settingsViewModel, child) => MaterialApp.router(
-            title: 'MVVM Clean Template',
-            debugShowCheckedModeBanner: false,
+  Widget build(BuildContext context, WidgetRef ref) {
+    final settings = ref.watch(settingsProvider);
 
-            // Router Configuration
-            routerConfig: AppRouter.router,
+    return MaterialApp.router(
+      title: 'MVVM Clean Template',
+      debugShowCheckedModeBanner: false,
 
-            // Theme Configuration - Now controlled by SettingsViewModel
-            theme: AppTheme.lightTheme,
-            darkTheme: AppTheme.darkTheme,
-            themeMode: settingsViewModel.themeMode,
+      // Router Configuration
+      routerConfig: AppRouter.router,
 
-            // Localization Configuration - Now controlled by SettingsViewModel
-            locale: settingsViewModel.locale,
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: const [Locale('en', ''), Locale('th', '')],
-          ),
-        ),
-      );
+      // Theme Configuration - Now controlled by SettingsNotifier
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: settings.themeMode,
+
+      // Localization Configuration - Now controlled by SettingsNotifier
+      locale: settings.locale,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [Locale('en', ''), Locale('th', '')],
+    );
+  }
 }
