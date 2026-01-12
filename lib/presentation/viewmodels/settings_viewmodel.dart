@@ -24,12 +24,11 @@ class SettingsState {
     ThemeMode? themeMode,
     Locale? locale,
     bool? isLoading,
-  }) =>
-      SettingsState(
-        themeMode: themeMode ?? this.themeMode,
-        locale: locale ?? this.locale,
-        isLoading: isLoading ?? this.isLoading,
-      );
+  }) => SettingsState(
+    themeMode: themeMode ?? this.themeMode,
+    locale: locale ?? this.locale,
+    isLoading: isLoading ?? this.isLoading,
+  );
 }
 
 /// Notifier for managing app settings (theme mode and locale)
@@ -61,10 +60,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
       locale = Locale(localeString);
     }
 
-    return SettingsState(
-      themeMode: themeMode,
-      locale: locale,
-    );
+    return SettingsState(themeMode: themeMode, locale: locale);
   }
 
   /// Set theme mode
@@ -140,5 +136,6 @@ class SettingsNotifier extends Notifier<SettingsState> {
 }
 
 /// Provider for SettingsNotifier
-final settingsProvider =
-    NotifierProvider<SettingsNotifier, SettingsState>(SettingsNotifier.new);
+final settingsProvider = NotifierProvider<SettingsNotifier, SettingsState>(
+  SettingsNotifier.new,
+);

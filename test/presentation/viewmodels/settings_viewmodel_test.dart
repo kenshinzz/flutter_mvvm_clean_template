@@ -251,12 +251,9 @@ void main() {
     group('State Changes', () {
       test('should update state when theme changes', () async {
         var updateCount = 0;
-        container.listen(
-          settingsProvider,
-          (previous, next) {
-            updateCount++;
-          },
-        );
+        container.listen(settingsProvider, (previous, next) {
+          updateCount++;
+        });
 
         // Act
         await container
@@ -269,12 +266,9 @@ void main() {
 
       test('should update state when locale changes', () async {
         var updateCount = 0;
-        container.listen(
-          settingsProvider,
-          (previous, next) {
-            updateCount++;
-          },
-        );
+        container.listen(settingsProvider, (previous, next) {
+          updateCount++;
+        });
 
         // Act
         await container

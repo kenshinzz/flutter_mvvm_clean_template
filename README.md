@@ -13,6 +13,7 @@ A production-ready Flutter project template implementing **MVVM Clean Architectu
 | 🏗️ **Clean Architecture** | Separation of concerns with Domain, Data, and Presentation layers |
 | 📱 **MVVM Pattern** | ViewModels with Riverpod Notifiers for reactive state management |
 | 💉 **Riverpod DI** | Single, unified dependency injection using Riverpod providers |
+| 🧭 **GoRouter Navigation** | Declarative, type-safe routing with path/query parameters |
 | 🌍 **Multi-Environment** | Dev, Staging, and Production configurations |
 | 🎨 **Theme System** | Light/Dark/System themes with Material 3 |
 | 🌐 **Localization** | English & Thai with type-safe translations |
@@ -182,6 +183,197 @@ class UserNotifier extends Notifier<UserState> {
   }
 }
 ```
+
+## 🧭 Navigation with GoRouter
+
+This project uses **GoRouter** for declarative, type-safe navigation. All routes are centralized in `lib/core/router/`.
+
+### Route Configuration
+
+Routes are defined in `lib/core/router/app_router.dart` and route names are constants in `lib/core/router/route_names.dart`:
+
+```dart
+// lib/core/router/route_names.dart
+class RouteNames {
+  static const String splash = '/';
+  static const String home = '/home';
+  static const String settings = '/settings';
+  static const String login = '/login';
+  static const String profile = '/profile';
+  // ... more routes
+}
+```
+
+### Basic Navigation
+
+```dart
+// Navigate to a route (replaces current route)
+context.go(RouteNames.home);
+
+// Navigate with push (adds to navigation stack)
+context.push(RouteNames.settings);
+
+// Pop current route
+context.pop();
+
+// Replace current route
+context.replace(RouteNames.login);
+
+// Pop until a specific route
+context.go(RouteNames.home);
+```
+
+### Navigation with Parameters
+
+#### Path Parameters
+
+```dart
+// Route definition
+GoRoute(
+  path: '/user/:id',
+  name: 'user-detail',
+  builder: (context, state) {
+    final userId = state.pathParameters['id']!;
+    return UserDetailPage(userId: userId);
+  },
+),
+
+// Navigation
+context.go('/user/123');
+// Or using named route
+context.goNamed('user-detail', pathParameters: {'id': '123'});
+```
+
+#### Query Parameters
+
+```dart
+// Route definition
+GoRoute(
+  path: '/search',
+  name: 'search',
+  builder: (context, state) {
+    final query = state.uri.queryParameters['q'];
+    return SearchPage(query: query);
+  },
+),
+
+// Navigation
+context.go('/search?q=flutter');
+// Or using named route
+context.goNamed('search', queryParameters: {'q': 'flutter'});
+```
+
+#### Extra Data
+
+```dart
+// Navigation with extra data
+context.push(
+  RouteNames.profile,
+  extra: User(id: '123', name: 'John'),
+);
+
+// Route definition
+GoRoute(
+  path: RouteNames.profile,
+  builder: (context, state) {
+    final user = state.extra as User;
+    return ProfilePage(user: user);
+  },
+),
+```
+
+### Adding a New Route
+
+**Step 1**: Add route constant to `route_names.dart`:
+```dart
+static const String productDetail = '/product/:id';
+```
+
+**Step 2**: Create the page widget:
+```dart
+// lib/presentation/pages/product_detail_page.dart
+class ProductDetailPage extends StatelessWidget {
+  const ProductDetailPage({required this.productId, super.key});
+  final String productId;
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Product Details')),
+      body: Center(child: Text('Product ID: $productId')),
+    );
+  }
+}
+```
+
+**Step 3**: Register route in `app_router.dart`:
+```dart
+GoRoute(
+  path: RouteNames.productDetail,
+  name: 'product-detail',
+  builder: (context, state) {
+    final productId = state.pathParameters['id']!;
+    return ProductDetailPage(productId: productId);
+  },
+),
+```
+
+### Authentication Guards
+
+Implement authentication redirects in `app_router.dart`:
+
+```dart
+redirect: (context, state) {
+  // Access auth state from Riverpod using ProviderScope.containerOf
+  final container = ProviderScope.containerOf(context);
+  final authState = container.read(authProvider);
+  final isAuthenticated = authState.isAuthenticated;
+  final isAuthRoute = state.matchedLocation == RouteNames.login ||
+                      state.matchedLocation == RouteNames.register;
+
+  // Redirect to login if not authenticated
+  if (!isAuthenticated && !isAuthRoute) {
+    return RouteNames.login;
+  }
+
+  // Redirect to home if authenticated and on auth page
+  if (isAuthenticated && isAuthRoute) {
+    return RouteNames.home;
+  }
+
+  return null; // No redirect
+},
+```
+
+**Note**: For more complex auth flows, consider using `GoRouter.refreshListenable` with a `ChangeNotifier` or `ValueNotifier` to automatically refresh routes when auth state changes.
+
+### Error Handling
+
+GoRouter automatically handles route errors with a custom error page:
+
+```dart
+errorBuilder: (context, state) => _ErrorPage(error: state.error.toString()),
+```
+
+### Navigation Best Practices
+
+1. **Always use `RouteNames` constants** - Never hardcode route paths
+2. **Use named routes** - Makes navigation more maintainable
+3. **Handle parameters safely** - Always check for null values
+4. **Use `context.go()` for top-level navigation** - Replaces entire stack
+5. **Use `context.push()` for modal flows** - Adds to navigation stack
+6. **Use `context.pop()` for going back** - Removes current route
+
+### Current Routes
+
+| Route | Path | Description |
+|-------|------|-------------|
+| Splash | `/` | Initial splash screen |
+| Home | `/home` | Main home page |
+| Settings | `/settings` | App settings |
+| Login | `/login` | Login page (coming soon) |
+| Register | `/register` | Registration page (coming soon) |
+| Profile | `/profile` | User profile (coming soon) |
 
 ## 🎨 Theme Management
 

@@ -30,19 +30,19 @@ class TestWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ProviderScope(
-        overrides: overrides,
-        child: MaterialApp(
-          locale: locale ?? const Locale('en'),
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: const [Locale('en', ''), Locale('th', '')],
-          home: child,
-        ),
-      );
+    overrides: overrides,
+    child: MaterialApp(
+      locale: locale ?? const Locale('en'),
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [Locale('en', ''), Locale('th', '')],
+      home: child,
+    ),
+  );
 }
 
 /// Helper to pump widget with all necessary setup
@@ -57,11 +57,7 @@ Future<void> pumpTestWidget(
   final allOverrides = [prefsOverride, ...?overrides];
 
   await tester.pumpWidget(
-    TestWrapper(
-      overrides: allOverrides,
-      locale: locale,
-      child: widget,
-    ),
+    TestWrapper(overrides: allOverrides, locale: locale, child: widget),
   );
   await tester.pumpAndSettle();
 }
@@ -79,11 +75,10 @@ Future<ProviderContainer> createTestContainer({
   List<Override>? overrides,
   Map<String, Object>? sharedPrefsValues,
 }) async {
-  final prefsOverride =
-      await createSharedPreferencesOverride(values: sharedPrefsValues);
-  return ProviderContainer(
-    overrides: [prefsOverride, ...?overrides],
+  final prefsOverride = await createSharedPreferencesOverride(
+    values: sharedPrefsValues,
   );
+  return ProviderContainer(overrides: [prefsOverride, ...?overrides]);
 }
 
 /// Extension methods for easier testing
