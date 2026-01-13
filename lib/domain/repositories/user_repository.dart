@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:mvvm_clean_template/core/errors/failures.dart';
-import 'package:mvvm_clean_template/domain/entities/user_entity.dart';
+import 'package:speckit_flutter_template/core/errors/failures.dart';
+import 'package:speckit_flutter_template/domain/entities/user_entity.dart';
 
 /// User repository interface - defines the contract for data operations
 /// This is part of the domain layer, implementation is in data layer

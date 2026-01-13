@@ -1,4 +1,4 @@
-import 'package:mvvm_clean_template/core/storage/secure_storage.dart';
+import 'package:speckit_flutter_template/core/storage/secure_storage.dart';
 
 /// Authentication storage service for managing auth tokens
 class AuthStorage {

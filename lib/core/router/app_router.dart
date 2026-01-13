@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mvvm_clean_template/core/router/route_names.dart';
-import 'package:mvvm_clean_template/presentation/pages/home_page.dart';
-import 'package:mvvm_clean_template/presentation/pages/settings_page.dart';
-import 'package:mvvm_clean_template/presentation/pages/splash_page.dart';
+import 'package:speckit_flutter_template/core/router/route_names.dart';
+import 'package:speckit_flutter_template/presentation/pages/home_page.dart';
+import 'package:speckit_flutter_template/presentation/pages/settings_page.dart';
+import 'package:speckit_flutter_template/presentation/pages/splash_page.dart';
 
 class AppRouter {
   AppRouter._();

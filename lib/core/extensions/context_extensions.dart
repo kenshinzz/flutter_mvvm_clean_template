@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mvvm_clean_template/l10n/app_localizations.dart';
+import 'package:speckit_flutter_template/l10n/app_localizations.dart';
 
 /// BuildContext extension methods for common operations
 extension ContextExtensions on BuildContext {

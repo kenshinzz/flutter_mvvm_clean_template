@@ -1,6 +1,6 @@
-import 'package:mvvm_clean_template/core/errors/exceptions.dart';
-import 'package:mvvm_clean_template/core/network/api_client.dart';
-import 'package:mvvm_clean_template/data/models/user_model.dart';
+import 'package:speckit_flutter_template/core/errors/exceptions.dart';
+import 'package:speckit_flutter_template/core/network/api_client.dart';
+import 'package:speckit_flutter_template/data/models/user_model.dart';
 
 /// Remote data source interface for user operations
 abstract class UserRemoteDataSource {

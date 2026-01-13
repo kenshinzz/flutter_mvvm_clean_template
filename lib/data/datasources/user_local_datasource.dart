@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:mvvm_clean_template/core/errors/exceptions.dart';
-import 'package:mvvm_clean_template/data/models/user_model.dart';
+import 'package:speckit_flutter_template/core/errors/exceptions.dart';
+import 'package:speckit_flutter_template/data/models/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Local data source interface for user caching

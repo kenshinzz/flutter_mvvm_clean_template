@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mvvm_clean_template/core/theme/app_colors.dart';
+import 'package:speckit_flutter_template/core/theme/app_colors.dart';
 
 class AppTextStyles {
   AppTextStyles._();

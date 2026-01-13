@@ -1,4 +1,4 @@
-import 'package:mvvm_clean_template/domain/entities/user_entity.dart';
+import 'package:speckit_flutter_template/domain/entities/user_entity.dart';
 
 /// User model - data layer representation with JSON serialization
 /// Extends UserEntity to maintain compatibility with domain layer

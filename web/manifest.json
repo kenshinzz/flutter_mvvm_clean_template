@@ -1,6 +1,6 @@
 {
-    "name": "mvvm_clean_template",
-    "short_name": "mvvm_clean_template",
+    "name": "speckit_flutter_template",
+    "short_name": "speckit_flutter_template",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

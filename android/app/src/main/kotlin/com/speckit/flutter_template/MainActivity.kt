@@ -1,4 +1,4 @@
-package com.example.mvvm_clean_template
+package com.speckit.flutter_template
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:mvvm_clean_template/core/errors/failures.dart';
+import 'package:speckit_flutter_template/core/errors/failures.dart';
 
 /// Generic async state for handling loading, success, and error states
 /// Use this in ViewModels to manage async operations

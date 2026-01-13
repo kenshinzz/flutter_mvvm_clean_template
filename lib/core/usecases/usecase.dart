@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:mvvm_clean_template/core/errors/failures.dart';
+import 'package:speckit_flutter_template/core/errors/failures.dart';
 
 /// Base class for all use cases
 /// [T] is the return type

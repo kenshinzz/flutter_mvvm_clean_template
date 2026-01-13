@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import 'package:mvvm_clean_template/core/constants/app_constants.dart';
+import 'package:speckit_flutter_template/core/constants/app_constants.dart';
 
 class AppDateUtils {
   AppDateUtils._();

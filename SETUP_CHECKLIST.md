@@ -7,19 +7,19 @@ This checklist helps ensure your template is properly configured before using it
 ### 1. Application Identity
 
 - [ ] **Android Package Name** (`android/app/build.gradle.kts`)
-  - Current: `com.example.mvvm_clean_template`
+  - Current: `com.example.speckit_flutter_template`
   - Change to: `com.yourcompany.yourapp`
   - Also update in `android/fastlane/Appfile`
 
 - [ ] **iOS Bundle Identifier** (`ios/fastlane/Appfile`)
-  - Current: `com.example.mvvmCleanTemplate`
+  - Current: `com.example.speckitFlutterTemplate`
   - Change to: `com.yourcompany.yourapp`
   - Update in Xcode project settings
 
 - [ ] **App Display Name**
   - Android: `android/app/src/main/AndroidManifest.xml` → `android:label`
   - iOS: `ios/Runner/Info.plist` → `CFBundleDisplayName`
-  - Current: "mvvm_clean_template" / "Mvvm Clean Template"
+  - Current: "speckit_flutter_template" / "Speckit Flutter Template"
 
 ### 2. API Configuration
 
@@ -70,7 +70,7 @@ This checklist helps ensure your template is properly configured before using it
   - Configure Match for certificate management
 
 - [ ] **Android Fastlane** (`android/fastlane/Appfile`)
-  - Update `package_name("com.example.mvvm_clean_template")`
+  - Update `package_name("com.example.speckit_flutter_template")`
   - Add `google-play-key.json` to `android/fastlane/`
   - Set up Google Play Service Account
 

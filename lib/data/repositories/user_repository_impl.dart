@@ -1,12 +1,12 @@
 import 'package:dartz/dartz.dart';
-import 'package:mvvm_clean_template/core/errors/exceptions.dart';
-import 'package:mvvm_clean_template/core/errors/failures.dart';
-import 'package:mvvm_clean_template/core/network/network_info.dart';
-import 'package:mvvm_clean_template/data/datasources/user_local_datasource.dart';
-import 'package:mvvm_clean_template/data/datasources/user_remote_datasource.dart';
-import 'package:mvvm_clean_template/data/models/user_model.dart';
-import 'package:mvvm_clean_template/domain/entities/user_entity.dart';
-import 'package:mvvm_clean_template/domain/repositories/user_repository.dart';
+import 'package:speckit_flutter_template/core/errors/exceptions.dart';
+import 'package:speckit_flutter_template/core/errors/failures.dart';
+import 'package:speckit_flutter_template/core/network/network_info.dart';
+import 'package:speckit_flutter_template/data/datasources/user_local_datasource.dart';
+import 'package:speckit_flutter_template/data/datasources/user_remote_datasource.dart';
+import 'package:speckit_flutter_template/data/models/user_model.dart';
+import 'package:speckit_flutter_template/domain/entities/user_entity.dart';
+import 'package:speckit_flutter_template/domain/repositories/user_repository.dart';
 
 /// Implementation of UserRepository
 /// Handles data coordination between remote and local data sources

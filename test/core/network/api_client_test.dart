@@ -4,8 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:mvvm_clean_template/core/errors/exceptions.dart';
-import 'package:mvvm_clean_template/core/network/api_client.dart';
+import 'package:speckit_flutter_template/core/errors/exceptions.dart';
+import 'package:speckit_flutter_template/core/network/api_client.dart';
 
 import 'api_client_test.mocks.dart';
 

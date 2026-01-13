@@ -5,10 +5,10 @@
 // 'flutter create' template.
 
 // The application's name. By default this is also the title of the Flutter window.
-PRODUCT_NAME = mvvm_clean_template
+PRODUCT_NAME = speckit_flutter_template
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.mvvmCleanTemplate
+PRODUCT_BUNDLE_IDENTIFIER = com.speckit.flutterTemplate
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2026 com.example. All rights reserved.

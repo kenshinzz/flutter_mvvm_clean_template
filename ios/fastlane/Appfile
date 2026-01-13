@@ -1,6 +1,6 @@
 # App Identifier (Bundle ID)
 # Replace with your actual bundle identifier
-app_identifier("com.example.mvvmCleanTemplate")
+app_identifier("com.speckit.flutterTemplate")
 
 # Apple Developer Account
 # Replace with your Apple ID

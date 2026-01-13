@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:mvvm_clean_template/core/errors/failures.dart';
+import 'package:speckit_flutter_template/core/errors/failures.dart';
 
 /// State for handling paginated data loading
 class PaginationState<T> extends Equatable {

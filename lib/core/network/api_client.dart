@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:mvvm_clean_template/core/constants/app_constants.dart';
-import 'package:mvvm_clean_template/core/errors/exceptions.dart';
+import 'package:speckit_flutter_template/core/constants/app_constants.dart';
+import 'package:speckit_flutter_template/core/errors/exceptions.dart';
 
 /// Response wrapper class to provide similar interface as before
 class ApiResponse {

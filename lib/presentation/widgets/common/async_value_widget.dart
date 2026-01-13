@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mvvm_clean_template/core/errors/failures.dart';
-import 'package:mvvm_clean_template/core/state/async_state.dart';
-import 'package:mvvm_clean_template/presentation/widgets/common/empty_state_widget.dart';
-import 'package:mvvm_clean_template/presentation/widgets/common/error_widget.dart';
-import 'package:mvvm_clean_template/presentation/widgets/common/loading_widget.dart';
+import 'package:speckit_flutter_template/core/errors/failures.dart';
+import 'package:speckit_flutter_template/core/state/async_state.dart';
+import 'package:speckit_flutter_template/presentation/widgets/common/empty_state_widget.dart';
+import 'package:speckit_flutter_template/presentation/widgets/common/error_widget.dart';
+import 'package:speckit_flutter_template/presentation/widgets/common/loading_widget.dart';
 
 /// Widget that handles AsyncState rendering with customizable builders
 class AsyncValueWidget<T> extends StatelessWidget {

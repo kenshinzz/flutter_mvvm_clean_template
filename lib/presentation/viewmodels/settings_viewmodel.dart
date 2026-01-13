@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mvvm_clean_template/core/di/providers.dart';
+import 'package:speckit_flutter_template/core/di/providers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// State class for settings

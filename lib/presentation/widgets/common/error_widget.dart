@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mvvm_clean_template/core/errors/failures.dart';
-import 'package:mvvm_clean_template/l10n/app_localizations.dart';
+import 'package:speckit_flutter_template/core/errors/failures.dart';
+import 'package:speckit_flutter_template/l10n/app_localizations.dart';
 
 /// A customizable error widget with retry functionality
 class AppErrorWidget extends StatelessWidget {

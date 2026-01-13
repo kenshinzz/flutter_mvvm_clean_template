@@ -1,7 +1,7 @@
 # Package Name (Application ID)
 # Replace with your actual package name
 json_key_file("fastlane/google-play-key.json")
-package_name("com.example.mvvm_clean_template")
+package_name("com.speckit.flutter_template")
 
 # For more information about the Appfile, see:
 # https://docs.fastlane.tools/advanced/#appfile

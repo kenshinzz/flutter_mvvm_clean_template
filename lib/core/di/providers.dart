@@ -7,21 +7,21 @@ library;
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:mvvm_clean_template/core/network/api_client.dart';
-import 'package:mvvm_clean_template/core/network/network_info.dart';
-import 'package:mvvm_clean_template/core/storage/auth_storage.dart';
-import 'package:mvvm_clean_template/core/storage/secure_storage.dart';
-import 'package:mvvm_clean_template/data/datasources/user_local_datasource.dart';
-import 'package:mvvm_clean_template/data/datasources/user_remote_datasource.dart';
-import 'package:mvvm_clean_template/data/repositories/user_repository_impl.dart';
-import 'package:mvvm_clean_template/domain/repositories/user_repository.dart';
-import 'package:mvvm_clean_template/domain/usecases/get_current_user_usecase.dart';
-import 'package:mvvm_clean_template/domain/usecases/get_users_usecase.dart';
-import 'package:mvvm_clean_template/domain/usecases/update_user_usecase.dart';
+import 'package:speckit_flutter_template/core/network/api_client.dart';
+import 'package:speckit_flutter_template/core/network/network_info.dart';
+import 'package:speckit_flutter_template/core/storage/auth_storage.dart';
+import 'package:speckit_flutter_template/core/storage/secure_storage.dart';
+import 'package:speckit_flutter_template/data/datasources/user_local_datasource.dart';
+import 'package:speckit_flutter_template/data/datasources/user_remote_datasource.dart';
+import 'package:speckit_flutter_template/data/repositories/user_repository_impl.dart';
+import 'package:speckit_flutter_template/domain/repositories/user_repository.dart';
+import 'package:speckit_flutter_template/domain/usecases/get_current_user_usecase.dart';
+import 'package:speckit_flutter_template/domain/usecases/get_users_usecase.dart';
+import 'package:speckit_flutter_template/domain/usecases/update_user_usecase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Re-export ViewModels
-export 'package:mvvm_clean_template/presentation/viewmodels/settings_viewmodel.dart'
+export 'package:speckit_flutter_template/presentation/viewmodels/settings_viewmodel.dart'
     show SettingsNotifier, SettingsState, settingsProvider;
 
 // =============================================================================

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mvvm_clean_template/core/router/route_names.dart';
-import 'package:mvvm_clean_template/l10n/app_localizations.dart';
+import 'package:speckit_flutter_template/core/router/route_names.dart';
+import 'package:speckit_flutter_template/l10n/app_localizations.dart';
 
 /// Splash screen that displays when the app starts
 class SplashPage extends StatefulWidget {

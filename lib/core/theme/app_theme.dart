@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mvvm_clean_template/core/theme/app_colors.dart';
-import 'package:mvvm_clean_template/core/theme/app_text_styles.dart';
+import 'package:speckit_flutter_template/core/theme/app_colors.dart';
+import 'package:speckit_flutter_template/core/theme/app_text_styles.dart';
 
 class AppTheme {
   AppTheme._();

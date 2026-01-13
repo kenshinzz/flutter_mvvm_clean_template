@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mvvm_clean_template/core/di/providers.dart';
-import 'package:mvvm_clean_template/l10n/app_localizations.dart';
+import 'package:speckit_flutter_template/core/di/providers.dart';
+import 'package:speckit_flutter_template/l10n/app_localizations.dart';
 
 /// Settings page for theme and language configuration
 class SettingsPage extends ConsumerWidget {

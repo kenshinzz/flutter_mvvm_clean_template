@@ -2,7 +2,7 @@
 
 A production-ready Flutter project template implementing **MVVM Clean Architecture** with **Riverpod** for both state management and dependency injection.
 
-[![CI](https://github.com/YOUR_USERNAME/flutter_mvvm_clean_template/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR_USERNAME/flutter_mvvm_clean_template/actions/workflows/ci.yml)
+[![CI](https://github.com/YOUR_USERNAME/flutter_speckit_flutter_template/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR_USERNAME/flutter_speckit_flutter_template/actions/workflows/ci.yml)
 [![Flutter](https://img.shields.io/badge/Flutter-3.38.5-blue.svg)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-3.10.4-blue.svg)](https://dart.dev)
 
@@ -103,8 +103,8 @@ lib/
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/flutter_mvvm_clean_template.git
-cd flutter_mvvm_clean_template
+git clone https://github.com/YOUR_USERNAME/flutter_speckit_flutter_template.git
+cd flutter_speckit_flutter_template
 
 # Complete setup (dependencies + iOS pods)
 make setup
@@ -122,8 +122,8 @@ make help
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/flutter_mvvm_clean_template.git
-cd flutter_mvvm_clean_template
+git clone https://github.com/YOUR_USERNAME/flutter_speckit_flutter_template.git
+cd flutter_speckit_flutter_template
 
 # Install dependencies
 flutter pub get
