@@ -4,13 +4,13 @@ app_identifier("com.example.mvvmCleanTemplate")
 
 # Apple Developer Account
 # Replace with your Apple ID
-apple_id("your-apple-id@example.com")
+apple_id("iyc-cicd-mobile@iyc.cloud")
 
 # Team ID (if you have multiple teams)
-# team_id("YOUR_TEAM_ID")
+team_id("92XK5S268V")
 
 # App Store Connect Team ID (if different from Developer Portal)
-# itc_team_id("YOUR_ITC_TEAM_ID")
+itc_team_id("1938402")
 
 # For more information about the Appfile, see:
 # https://docs.fastlane.tools/advanced/#appfile

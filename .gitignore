@@ -140,6 +140,8 @@ ios/Runner/GoogleService-Info.plist
 */fastlane/README.md
 */fastlane/google-play-key.json
 */fastlane/.env*
+*/fastlane/Configfile
+*/fastlane/Matchfile
 ios/fastlane/metadata/
 android/fastlane/metadata/
 Gemfile.lock

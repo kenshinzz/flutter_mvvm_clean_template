@@ -70,14 +70,173 @@ base64 -i upload-keystore.jks | pbcopy
 
 #### iOS Secrets
 
-| Secret | Description |
-|--------|-------------|
-| `APP_STORE_CONNECT_API_KEY_ID` | App Store Connect API Key ID |
-| `APP_STORE_CONNECT_API_ISSUER_ID` | App Store Connect Issuer ID |
-| `APP_STORE_CONNECT_API_KEY_CONTENT` | API Key (.p8 file content) |
-| `MATCH_PASSWORD` | Fastlane Match encryption password |
-| `MATCH_GIT_URL` | Git repo URL for Match certificates |
-| `MATCH_GIT_BASIC_AUTHORIZATION` | Base64-encoded `username:token` |
+| Secret | Description | How to Obtain |
+|--------|-------------|---------------|
+| `APP_STORE_CONNECT_API_KEY_ID` | App Store Connect API Key ID | See detailed steps below |
+| `APP_STORE_CONNECT_API_ISSUER_ID` | App Store Connect Issuer ID | See detailed steps below |
+| `APP_STORE_CONNECT_API_KEY_CONTENT` | API Key (.p8 file content) | See detailed steps below |
+| `MATCH_PASSWORD` | Fastlane Match encryption password | See detailed steps below |
+| `MATCH_GIT_URL` | Git repo URL for Match certificates | See detailed steps below |
+| `MATCH_GIT_BRANCH` | Branch name for this app (branch-per-app pattern) | See detailed steps below |
+| `MATCH_GIT_BASIC_AUTHORIZATION` | Base64-encoded `username:token` | See detailed steps below |
+
+##### Step-by-Step: App Store Connect API Credentials
+
+**1. Create App Store Connect API Key**
+
+1. Go to [App Store Connect](https://appstoreconnect.apple.com/)
+2. Navigate to **Users and Access** → **Keys** tab
+3. Click the **+** button to create a new key
+4. Enter a name (e.g., "GitHub Actions CI/CD")
+5. Select **Access Level**: **Admin** or **App Manager** (minimum required: **App Manager**)
+6. Click **Generate**
+7. **Important**: Download the `.p8` key file immediately (you can only download it once!)
+8. Note down:
+   - **Key ID** (e.g., `ABC123DEF4`) → This is `APP_STORE_CONNECT_API_KEY_ID`
+   - **Issuer ID** (shown at top of Keys page, e.g., `12345678-1234-1234-1234-123456789012`) → This is `APP_STORE_CONNECT_API_ISSUER_ID`
+
+**2. Get API Key Content**
+
+The `.p8` file content is what you need for `APP_STORE_CONNECT_API_KEY_CONTENT`:
+
+```bash
+# Copy the entire content of the .p8 file (including headers)
+cat AuthKey_ABC123DEF4.p8 | pbcopy
+
+# Or read it:
+cat AuthKey_ABC123DEF4.p8
+```
+
+The content should look like:
+```
+-----BEGIN PRIVATE KEY-----
+MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQg...
+... (more lines) ...
+-----END PRIVATE KEY-----
+```
+
+**3. Add to GitHub Secrets**
+
+Go to your GitHub repository → **Settings** → **Secrets and variables** → **Actions** → **New repository secret**:
+
+- `APP_STORE_CONNECT_API_KEY_ID`: Paste the Key ID (e.g., `ABC123DEF4`)
+- `APP_STORE_CONNECT_API_ISSUER_ID`: Paste the Issuer ID (e.g., `12345678-1234-1234-1234-123456789012`)
+- `APP_STORE_CONNECT_API_KEY_CONTENT`: Paste the entire `.p8` file content (including `-----BEGIN PRIVATE KEY-----` and `-----END PRIVATE KEY-----`)
+
+##### Step-by-Step: Fastlane Match Credentials
+
+**1. Create Match Password**
+
+This is a password you create yourself to encrypt certificates in the Match repository:
+
+```bash
+# Generate a secure password (or create your own)
+openssl rand -base64 32
+```
+
+Save this password securely → This is `MATCH_PASSWORD`
+
+**2. Create Private Git Repository for Certificates**
+
+Match stores certificates and provisioning profiles in a Git repository:
+
+1. Create a **private** repository on GitHub (e.g., `your-org/ios-certificates`)
+2. Copy the repository URL → This is `MATCH_GIT_URL`
+   - HTTPS: `https://github.com/your-org/ios-certificates.git`
+   - SSH: `git@github.com:your-org/ios-certificates.git`
+
+**3. Generate GitHub Personal Access Token**
+
+For CI/CD, Match needs authentication to access the certificates repository:
+
+1. Go to GitHub → **Settings** → **Developer settings** → **Personal access tokens** → **Tokens (classic)**
+2. Click **Generate new token (classic)**
+3. Give it a name (e.g., "Fastlane Match CI/CD")
+4. Select scopes:
+   - ✅ `repo` (Full control of private repositories)
+5. Click **Generate token**
+6. **Copy the token immediately** (you won't see it again!)
+
+**4. Create Basic Authorization**
+
+`MATCH_GIT_BASIC_AUTHORIZATION` is Base64-encoded `username:token`:
+
+```bash
+# Replace YOUR_USERNAME and YOUR_TOKEN
+echo -n "YOUR_USERNAME:YOUR_TOKEN" | base64 | pbcopy
+```
+
+Or manually:
+```bash
+# Example: username is "octocat", token is "ghp_1234567890abcdef"
+echo -n "octocat:ghp_1234567890abcdef" | base64
+# Output: b2N0b2NhdDpnaHBfMTIzNDU2Nzg5MGFiY2RlZg==
+```
+
+**5. Initialize Match Locally (First Time Setup)**
+
+```bash
+cd ios
+
+# Initialize Match
+bundle exec fastlane match init
+
+# When prompted:
+# 1. Select "git" as storage mode
+# 2. Enter your Git repository URL (MATCH_GIT_URL)
+# 3. Enter your Match password (MATCH_PASSWORD)
+
+# Generate certificates for App Store
+bundle exec fastlane match appstore
+
+# Generate certificates for Development (optional, for local testing)
+bundle exec fastlane match development
+```
+
+**6. Add to GitHub Secrets**
+
+- `MATCH_PASSWORD`: Your Match encryption password
+- `MATCH_GIT_URL`: Your certificates repository URL (e.g., `https://github.com/IYCLLC/ms-ios-certs.git`)
+- `MATCH_GIT_BRANCH`: **Required for branch-per-app pattern** - Your app's branch name (e.g., `mvvm-template`)
+- `MATCH_GIT_BASIC_AUTHORIZATION`: Base64-encoded `username:token` (e.g., `b2N0b2NhdDpnaHBfMTIzNDU2Nzg5MGFiY2RlZg==`)
+
+##### Quick Reference: All iOS Secrets
+
+```bash
+# 1. App Store Connect API Key
+APP_STORE_CONNECT_API_KEY_ID="ABC123DEF4"
+APP_STORE_CONNECT_API_ISSUER_ID="12345678-1234-1234-1234-123456789012"
+APP_STORE_CONNECT_API_KEY_CONTENT="-----BEGIN PRIVATE KEY-----\nMIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQg...\n-----END PRIVATE KEY-----"
+
+# 2. Match Credentials (Centralized repo with branch-per-app)
+MATCH_PASSWORD="your-secure-password-here"
+MATCH_GIT_URL="https://github.com/IYCLLC/ms-ios-certs.git"
+MATCH_GIT_BRANCH="your-app-name"  # Branch name for this app
+MATCH_GIT_BASIC_AUTHORIZATION="$(echo -n 'username:token' | base64)"
+```
+
+##### Verify Setup
+
+Test locally before using in CI/CD:
+
+```bash
+cd ios
+
+# Test Match access (with branch-per-app)
+MATCH_PASSWORD="your-password" \
+MATCH_GIT_URL="https://github.com/IYCLLC/ms-ios-certs.git" \
+MATCH_GIT_BRANCH="your-app-name" \
+MATCH_GIT_BASIC_AUTHORIZATION="$(echo -n 'username:token' | base64)" \
+bundle exec fastlane match appstore --readonly
+
+# Test App Store Connect API
+APP_STORE_CONNECT_API_KEY_ID="your-key-id" \
+APP_STORE_CONNECT_API_ISSUER_ID="your-issuer-id" \
+bundle exec fastlane run app_store_connect_api_key \
+  key_id:"$APP_STORE_CONNECT_API_KEY_ID" \
+  issuer_id:"$APP_STORE_CONNECT_API_ISSUER_ID" \
+  key_filepath:"path/to/AuthKey_*.p8"
+```
 
 ### Step 2: Local Fastlane Setup
 
@@ -122,17 +281,96 @@ package_name("your.package.name")
 
 #### iOS - Using Fastlane Match
 
-1. Create a private Git repo for certificates
-2. Initialize Match:
-   ```bash
-   cd ios
-   fastlane match init
-   ```
-3. Generate certificates:
-   ```bash
-   fastlane match appstore
-   fastlane match development
-   ```
+**⚠️ IMPORTANT: You MUST create a private Git repository for certificates before using Match.**
+
+**1. Centralized Git Repository with Branch-Per-App Pattern**
+
+This project uses a centralized repository: `https://github.com/IYCLLC/ms-ios-certs.git`
+
+**Each app uses its own branch** (e.g., `mvvm-template`, `app-name`, etc.)
+
+**If you need to create a new branch for this app:**
+1. Clone the repository: `git clone https://github.com/IYCLLC/ms-ios-certs.git`
+2. Create a new branch: `git checkout -b your-app-name`
+3. Push the branch: `git push -u origin your-app-name`
+4. Use this branch name in `MATCH_GIT_BRANCH` secret
+
+**Benefits:**
+- ✅ Single repository for all apps
+- ✅ Easier certificate management
+- ✅ Isolated certificates per app (via branches)
+
+**2. Create Match Password**
+
+Generate a secure password to encrypt certificates in the repository:
+
+```bash
+# Generate a secure password
+openssl rand -base64 32
+
+# Or create your own strong password
+# Save this password securely - you'll need it for CI/CD
+```
+
+**3. Initialize Match**
+
+```bash
+cd ios
+
+# Initialize Match (this will create Matchfile)
+bundle exec fastlane match init
+
+# When prompted:
+# 1. Select "git" as storage mode
+# 2. Enter your Git repository URL: https://github.com/IYCLLC/ms-ios-certs.git
+# 3. Enter your Match password (from step 2)
+#
+# After initialization, edit Matchfile and add:
+# git_branch("your-app-name")  # Or use MATCH_GIT_BRANCH env var
+```
+
+This creates a `Matchfile` in `ios/fastlane/` with your configuration.
+
+**4. Generate Certificates (First Time Only)**
+
+```bash
+cd ios
+
+# Generate App Store certificates (for TestFlight/App Store)
+bundle exec fastlane match appstore
+
+# Generate Development certificates (optional, for local testing)
+bundle exec fastlane match development
+```
+
+**What happens:**
+- Match connects to Apple Developer Portal
+- Creates/retrieves certificates and provisioning profiles
+- Encrypts them with your Match password
+- Stores them in your Git repository
+- Downloads and installs them locally
+
+**5. Verify Certificates Repository**
+
+Check your Git repository - it should now contain:
+```
+ios-certificates/
+├── certs/
+│   └── distribution/
+│       └── [encrypted certificate files]
+├── profiles/
+│   └── appstore/
+│       └── [encrypted provisioning profiles]
+└── README.md (auto-generated by Match)
+```
+
+**6. Add GitHub Secrets**
+
+Add these to your GitHub repository secrets:
+
+- `MATCH_PASSWORD`: The password you created in step 2
+- `MATCH_GIT_URL`: Your certificates repository URL (from step 1)
+- `MATCH_GIT_BASIC_AUTHORIZATION`: Base64-encoded `username:token` (see Step 1 above for how to create this)
 
 #### Android - Create Upload Key
 

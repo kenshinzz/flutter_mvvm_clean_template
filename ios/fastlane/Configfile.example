@@ -1,0 +1,27 @@
+# Configfile for Fastlane Match
+# This file is optional and mainly useful for local development
+# 
+# For CI/CD, Match configuration is passed via environment variables
+# (see .github/workflows/cd-ios.yml)
+#
+# To use this file:
+# 1. Copy Configfile.example to Configfile
+# 2. Update the values below
+# 3. Add Configfile to .gitignore (it contains sensitive info)
+
+# Match Git Repository URL
+# Uncomment and set if you want to use Match locally without env vars
+# git_url("https://github.com/your-org/ios-certificates.git")
+
+# Match Password
+# Uncomment and set if you want to use Match locally without env vars
+# git_basic_authorization(Base64.strict_encode64("username:token"))
+
+# Match Storage Mode (default: git)
+# storage_mode("git")
+
+# Match Type (default: appstore)
+# type("appstore")
+
+# For more information, see:
+# https://docs.fastlane.tools/actions/match/

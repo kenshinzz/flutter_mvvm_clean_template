@@ -28,10 +28,12 @@ platform :ios do
     )
 
     # Match - Code Signing
+    # For centralized repo with branch-per-app: use MATCH_GIT_BRANCH env var
     match(
       type: "appstore",
       readonly: is_ci,
-      api_key: api_key
+      api_key: api_key,
+      git_branch: ENV["MATCH_GIT_BRANCH"] # Optional: branch name for this app
     )
 
     # Increment build number
@@ -75,10 +77,12 @@ platform :ios do
     )
 
     # Match - Code Signing
+    # For centralized repo with branch-per-app: use MATCH_GIT_BRANCH env var
     match(
       type: "appstore",
       readonly: is_ci,
-      api_key: api_key
+      api_key: api_key,
+      git_branch: ENV["MATCH_GIT_BRANCH"] # Optional: branch name for this app
     )
 
     # Increment build number
@@ -128,8 +132,16 @@ platform :ios do
   # =====================
   desc "Sync certificates and profiles"
   lane :sync_certs do
-    match(type: "development", readonly: true)
-    match(type: "appstore", readonly: true)
+    match(
+      type: "development",
+      readonly: true,
+      git_branch: ENV["MATCH_GIT_BRANCH"]
+    )
+    match(
+      type: "appstore",
+      readonly: true,
+      git_branch: ENV["MATCH_GIT_BRANCH"]
+    )
   end
 
   # =====================
@@ -146,7 +158,11 @@ platform :ios do
       }
     )
     
-    match(type: "development", force_for_new_devices: true)
+    match(
+      type: "development",
+      force_for_new_devices: true,
+      git_branch: ENV["MATCH_GIT_BRANCH"]
+    )
   end
 
   # =====================

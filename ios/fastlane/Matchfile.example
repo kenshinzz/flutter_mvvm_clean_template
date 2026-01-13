@@ -1,0 +1,40 @@
+# Matchfile for Fastlane Match
+# This file is optional and mainly useful for local development
+# 
+# For CI/CD, Match configuration is passed via environment variables
+# (see .github/workflows/cd-ios.yml)
+#
+# When you run `fastlane match init`, it creates a Matchfile automatically.
+# This is an example template.
+#
+# To use this file:
+# 1. Copy Matchfile.example to Matchfile
+# 2. Update the values below
+# 3. Add Matchfile to .gitignore (it contains sensitive info)
+
+# Git repository URL where certificates are stored
+# For centralized repo with branch-per-app pattern:
+git_url("https://github.com/IYCLLC/ms-ios-certs.git")
+
+# Git branch for this app (use different branch per app)
+# Uncomment and set your app-specific branch name
+# git_branch("your-app-name")
+
+# Storage mode: git, google_cloud, or s3
+# storage_mode("git")
+
+# Git basic authorization (Base64 encoded username:token)
+# Uncomment and set if you want to use Match locally without env vars
+# git_basic_authorization(Base64.strict_encode64("username:token"))
+
+# App identifier (usually inherited from Appfile)
+# app_identifier("com.example.mvvmCleanTemplate")
+
+# Team ID (usually inherited from Appfile)
+# team_id("YOUR_TEAM_ID")
+
+# Username for App Store Connect (usually inherited from Appfile)
+# username("your@email.com")
+
+# For more information, see:
+# https://docs.fastlane.tools/actions/match/

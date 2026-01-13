@@ -52,7 +52,14 @@ This checklist helps ensure your template is properly configured before using it
   - Update `build.gradle.kts` to use release signing config
 
 - [ ] **iOS Code Signing**
-  - Set up certificates via Fastlane Match or Xcode
+  - ⚠️ **REQUIRED**: Create a private Git repository for certificates
+    - See `ios/fastlane/MATCH_SETUP.md` for detailed instructions
+  - Set up certificates via Fastlane Match:
+    ```bash
+    cd ios
+    bundle exec fastlane match init
+    bundle exec fastlane match appstore
+    ```
   - Update `ios/fastlane/Appfile` with your Apple ID and Team ID
 
 ### 4. Fastlane Configuration
@@ -87,7 +94,9 @@ This checklist helps ensure your template is properly configured before using it
     - `APP_STORE_CONNECT_API_KEY_CONTENT`
     - `MATCH_PASSWORD`
     - `MATCH_GIT_URL`
+    - `MATCH_GIT_BRANCH` (branch name for this app in centralized repo)
     - `MATCH_GIT_BASIC_AUTHORIZATION`
+  - **📖 See `CI_CD_SETUP.md` for detailed step-by-step instructions on obtaining these secrets**
 
 ## 🟡 Important - Recommended Before Production
 
