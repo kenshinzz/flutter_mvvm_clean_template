@@ -21,6 +21,7 @@ A production-ready Flutter project template implementing **MVVM Clean Architectu
 | 🧪 **Testing** | Unit, Widget, and Golden tests with CI integration |
 | 🚀 **CI/CD** | GitHub Actions + Fastlane for automated deployment |
 | 📦 **Optimized Builds** | ProGuard/R8 shrinking, split APKs |
+| 🔢 **Version Management** | Semantic versioning with automated sync |
 
 ## 📁 Project Structure
 
@@ -748,6 +749,40 @@ flutter build ios --release --no-codesign
 # Release with codesign
 flutter build ios --release
 ```
+
+## 🔢 Version Management
+
+The project uses **Semantic Versioning** (SemVer) format: `MAJOR.MINOR.PATCH+BUILD`
+
+### Quick Commands
+
+```bash
+# Show current version
+make version-app
+
+# Bump versions
+make version-bump-patch   # 1.0.0 -> 1.0.1
+make version-bump-minor   # 1.0.0 -> 1.1.0
+make version-bump-major   # 1.0.0 -> 2.0.0
+make version-bump-build   # 1.0.0+1 -> 1.0.0+2
+
+# Set version explicitly
+make version-set VERSION=1.2.3 BUILD=10
+```
+
+### Accessing Version in Code
+
+```dart
+import 'package:speckit_flutter_template/core/utils/version_info.dart';
+
+String version = VersionInfo.version;        // "1.0.0"
+String buildNumber = VersionInfo.buildNumber; // "1"
+String fullVersion = VersionInfo.fullVersion; // "1.0.0+1"
+```
+
+**Note**: Version is automatically synced from `pubspec.yaml` to Android and iOS during build.
+
+For detailed versioning guide, see [VERSIONING.md](VERSIONING.md).
 
 ## 📦 Dependencies
 

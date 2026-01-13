@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:speckit_flutter_template/core/di/providers.dart';
+import 'package:speckit_flutter_template/core/utils/version_info.dart';
 import 'package:speckit_flutter_template/l10n/app_localizations.dart';
 
 /// Settings page for theme and language configuration
@@ -46,14 +47,13 @@ class SettingsPage extends ConsumerWidget {
           // Reset Button
           Center(
             child: OutlinedButton.icon(
-              onPressed: () => _showResetDialog(context, settingsNotifier, l10n),
+              onPressed: () =>
+                  _showResetDialog(context, settingsNotifier, l10n),
               icon: const Icon(Icons.restore),
               label: Text(l10n.resetToDefaults),
               style: OutlinedButton.styleFrom(
                 foregroundColor: Theme.of(context).colorScheme.error,
-                side: BorderSide(
-                  color: Theme.of(context).colorScheme.error,
-                ),
+                side: BorderSide(color: Theme.of(context).colorScheme.error),
               ),
             ),
           ),
@@ -62,22 +62,22 @@ class SettingsPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildSectionHeader(BuildContext context, String title, IconData icon) => Row(
-      children: [
-        Icon(
-          icon,
-          size: 24,
-          color: Theme.of(context).colorScheme.primary,
-        ),
-        const SizedBox(width: 8),
-        Text(
-          title,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-        ),
-      ],
-    );
+  Widget _buildSectionHeader(
+    BuildContext context,
+    String title,
+    IconData icon,
+  ) => Row(
+    children: [
+      Icon(icon, size: 24, color: Theme.of(context).colorScheme.primary),
+      const SizedBox(width: 8),
+      Text(
+        title,
+        style: Theme.of(
+          context,
+        ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+      ),
+    ],
+  );
 
   Widget _buildThemeCard(
     BuildContext context,
@@ -85,70 +85,70 @@ class SettingsPage extends ConsumerWidget {
     SettingsNotifier notifier,
     AppLocalizations l10n,
   ) => Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Theme Mode Selector
-            Text(
-              l10n.themeDescription,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 16),
-            _buildThemeOption(
-              context,
-              settings,
-              notifier,
-              ThemeMode.light,
-              l10n.themeLight,
-              Icons.light_mode,
-            ),
-            const SizedBox(height: 8),
-            _buildThemeOption(
-              context,
-              settings,
-              notifier,
-              ThemeMode.dark,
-              l10n.themeDark,
-              Icons.dark_mode,
-            ),
-            const SizedBox(height: 8),
-            _buildThemeOption(
-              context,
-              settings,
-              notifier,
-              ThemeMode.system,
-              l10n.themeSystem,
-              Icons.brightness_auto,
-            ),
-            const SizedBox(height: 16),
-            const Divider(),
-            const SizedBox(height: 8),
-            // Quick Toggle
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  l10n.toggleTheme,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                Switch(
-                  value: settings.isDarkMode,
-                  onChanged: (value) => notifier.toggleTheme(),
-                  thumbIcon: WidgetStateProperty.resolveWith((states) {
-                    if (states.contains(WidgetState.selected)) {
-                      return const Icon(Icons.dark_mode);
-                    }
-                    return const Icon(Icons.light_mode);
-                  }),
-                ),
-              ],
-            ),
-          ],
-        ),
+    child: Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Theme Mode Selector
+          Text(
+            l10n.themeDescription,
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: 16),
+          _buildThemeOption(
+            context,
+            settings,
+            notifier,
+            ThemeMode.light,
+            l10n.themeLight,
+            Icons.light_mode,
+          ),
+          const SizedBox(height: 8),
+          _buildThemeOption(
+            context,
+            settings,
+            notifier,
+            ThemeMode.dark,
+            l10n.themeDark,
+            Icons.dark_mode,
+          ),
+          const SizedBox(height: 8),
+          _buildThemeOption(
+            context,
+            settings,
+            notifier,
+            ThemeMode.system,
+            l10n.themeSystem,
+            Icons.brightness_auto,
+          ),
+          const SizedBox(height: 16),
+          const Divider(),
+          const SizedBox(height: 8),
+          // Quick Toggle
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                l10n.toggleTheme,
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              Switch(
+                value: settings.isDarkMode,
+                onChanged: (value) => notifier.toggleTheme(),
+                thumbIcon: WidgetStateProperty.resolveWith((states) {
+                  if (states.contains(WidgetState.selected)) {
+                    return const Icon(Icons.dark_mode);
+                  }
+                  return const Icon(Icons.light_mode);
+                }),
+              ),
+            ],
+          ),
+        ],
       ),
-    );
+    ),
+  );
 
   Widget _buildThemeOption(
     BuildContext context,
@@ -190,9 +190,8 @@ class SettingsPage extends ConsumerWidget {
               child: Text(
                 title,
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      fontWeight:
-                          isSelected ? FontWeight.bold : FontWeight.normal,
-                    ),
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                ),
               ),
             ),
             if (isSelected)
@@ -212,57 +211,55 @@ class SettingsPage extends ConsumerWidget {
     SettingsNotifier notifier,
     AppLocalizations l10n,
   ) => Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              l10n.languageDescription,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 16),
-            _buildLanguageOption(
-              context,
-              settings,
-              notifier,
-              const Locale('en'),
-              l10n.languageEnglish,
-              'EN',
-            ),
-            const SizedBox(height: 8),
-            _buildLanguageOption(
-              context,
-              settings,
-              notifier,
-              const Locale('th'),
-              l10n.languageThai,
-              'TH',
-            ),
-            const SizedBox(height: 16),
-            const Divider(),
-            const SizedBox(height: 8),
-            // Quick Toggle
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  l10n.toggleLanguage,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                ElevatedButton.icon(
-                  onPressed: () => notifier.toggleLanguage(),
-                  icon: const Icon(Icons.swap_horiz),
-                  label: Text(
-                    settings.locale.languageCode == 'en' ? 'EN' : 'TH',
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+    child: Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.languageDescription,
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: 16),
+          _buildLanguageOption(
+            context,
+            settings,
+            notifier,
+            const Locale('en'),
+            l10n.languageEnglish,
+            'EN',
+          ),
+          const SizedBox(height: 8),
+          _buildLanguageOption(
+            context,
+            settings,
+            notifier,
+            const Locale('th'),
+            l10n.languageThai,
+            'TH',
+          ),
+          const SizedBox(height: 16),
+          const Divider(),
+          const SizedBox(height: 8),
+          // Quick Toggle
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                l10n.toggleLanguage,
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              ElevatedButton.icon(
+                onPressed: () => notifier.toggleLanguage(),
+                icon: const Icon(Icons.swap_horiz),
+                label: Text(settings.locale.languageCode == 'en' ? 'EN' : 'TH'),
+              ),
+            ],
+          ),
+        ],
       ),
-    );
+    ),
+  );
 
   Widget _buildLanguageOption(
     BuildContext context,
@@ -312,9 +309,8 @@ class SettingsPage extends ConsumerWidget {
               child: Text(
                 title,
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      fontWeight:
-                          isSelected ? FontWeight.bold : FontWeight.normal,
-                    ),
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                ),
               ),
             ),
             if (isSelected)
@@ -329,62 +325,65 @@ class SettingsPage extends ConsumerWidget {
   }
 
   Widget _buildAboutCard(BuildContext context, AppLocalizations l10n) => Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Icon(Icons.flutter_dash, size: 40),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        l10n.appTitle,
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      Text(
-                        '${l10n.version} 1.0.0',
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                    ],
-                  ),
+    child: Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.flutter_dash, size: 40),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.appTitle,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    Text(
+                      '${l10n.version} ${VersionInfo.version}',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            const Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                Chip(
-                  label: Text('Flutter 3+'),
-                  avatar: Icon(Icons.flutter_dash, size: 18),
-                ),
-                Chip(
-                  label: Text('MVVM'),
-                  avatar: Icon(Icons.architecture, size: 18),
-                ),
-                Chip(
-                  label: Text('GoRouter'),
-                  avatar: Icon(Icons.route, size: 18),
-                ),
-                Chip(
-                  label: Text('Riverpod'),
-                  avatar: Icon(Icons.inventory, size: 18),
-                ),
-              ],
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          const Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              Chip(
+                label: Text('Flutter 3+'),
+                avatar: Icon(Icons.flutter_dash, size: 18),
+              ),
+              Chip(
+                label: Text('MVVM'),
+                avatar: Icon(Icons.architecture, size: 18),
+              ),
+              Chip(
+                label: Text('GoRouter'),
+                avatar: Icon(Icons.route, size: 18),
+              ),
+              Chip(
+                label: Text('Riverpod'),
+                avatar: Icon(Icons.inventory, size: 18),
+              ),
+            ],
+          ),
+        ],
       ),
-    );
+    ),
+  );
 
   void _showResetDialog(
-      BuildContext context, SettingsNotifier notifier, AppLocalizations l10n) {
+    BuildContext context,
+    SettingsNotifier notifier,
+    AppLocalizations l10n,
+  ) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(

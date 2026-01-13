@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:speckit_flutter_template/core/di/providers.dart';
 import 'package:speckit_flutter_template/core/router/route_names.dart';
+import 'package:speckit_flutter_template/core/utils/version_info.dart';
 import 'package:speckit_flutter_template/l10n/app_localizations.dart';
 
 /// Home page with counter example and navigation to other pages
@@ -188,86 +189,86 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   Widget _buildDrawer(BuildContext context, AppLocalizations l10n) => Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          DrawerHeader(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Theme.of(context).colorScheme.primary,
-                  Theme.of(context).colorScheme.secondary,
-                ],
-              ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                const CircleAvatar(
-                  radius: 32,
-                  backgroundColor: Colors.white,
-                  child: Icon(Icons.person, size: 40),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  l10n.appTitle,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'MVVM Clean Architecture',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyMedium?.copyWith(color: Colors.white70),
-                ),
+    child: ListView(
+      padding: EdgeInsets.zero,
+      children: [
+        DrawerHeader(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Theme.of(context).colorScheme.primary,
+                Theme.of(context).colorScheme.secondary,
               ],
             ),
           ),
-          ListTile(
-            leading: const Icon(Icons.home),
-            title: Text(l10n.home),
-            selected: true,
-            onTap: () => Navigator.pop(context),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              const CircleAvatar(
+                radius: 32,
+                backgroundColor: Colors.white,
+                child: Icon(Icons.person, size: 40),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                l10n.appTitle,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                'MVVM Clean Architecture',
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: Colors.white70),
+              ),
+            ],
           ),
-          ListTile(
-            leading: const Icon(Icons.settings),
-            title: Text(l10n.settings),
-            onTap: () {
-              Navigator.pop(context);
-              context.push(RouteNames.settings);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.person),
-            title: Text(l10n.profile),
-            onTap: () {
-              Navigator.pop(context);
-              context.push(RouteNames.profile);
-            },
-          ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.info_outline),
-            title: Text(l10n.about),
-            onTap: () {
-              Navigator.pop(context);
-              _showAboutDialog(context, l10n);
-            },
-          ),
-        ],
-      ),
-    );
+        ),
+        ListTile(
+          leading: const Icon(Icons.home),
+          title: Text(l10n.home),
+          selected: true,
+          onTap: () => Navigator.pop(context),
+        ),
+        ListTile(
+          leading: const Icon(Icons.settings),
+          title: Text(l10n.settings),
+          onTap: () {
+            Navigator.pop(context);
+            context.push(RouteNames.settings);
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.person),
+          title: Text(l10n.profile),
+          onTap: () {
+            Navigator.pop(context);
+            context.push(RouteNames.profile);
+          },
+        ),
+        const Divider(),
+        ListTile(
+          leading: const Icon(Icons.info_outline),
+          title: Text(l10n.about),
+          onTap: () {
+            Navigator.pop(context);
+            _showAboutDialog(context, l10n);
+          },
+        ),
+      ],
+    ),
+  );
 
   void _showAboutDialog(BuildContext context, AppLocalizations l10n) {
     showAboutDialog(
       context: context,
       applicationName: l10n.appTitle,
-      applicationVersion: '1.0.0',
+      applicationVersion: VersionInfo.version,
       applicationIcon: const Icon(Icons.flutter_dash, size: 48),
       children: [
         const Text(

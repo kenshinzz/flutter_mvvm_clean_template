@@ -109,20 +109,30 @@ platform :android do
   end
 
   # =====================
-  # Increment Version
+  # Version Management
   # =====================
-  desc "Increment version code"
-  lane :increment_version do
-    # Read current version from pubspec.yaml
-    pubspec = File.read("../../pubspec.yaml")
-    current_version = pubspec.match(/version:\s*(\d+\.\d+\.\d+)\+(\d+)/)[2].to_i
-    new_version = current_version + 1
+  
+  # Sync version from pubspec.yaml (Android reads from pubspec automatically via Flutter)
+  desc "Show current version from pubspec.yaml"
+  lane :version_info do
+    pubspec_path = File.join("..", "..", "pubspec.yaml")
+    unless File.exist?(pubspec_path)
+      UI.user_error!("pubspec.yaml not found at #{pubspec_path}")
+    end
     
-    # Update pubspec.yaml
-    new_pubspec = pubspec.gsub(/version:\s*(\d+\.\d+\.\d+)\+\d+/, "version: \\1+#{new_version}")
-    File.write("../../pubspec.yaml", new_pubspec)
+    pubspec_content = File.read(pubspec_path)
+    version_match = pubspec_content.match(/version:\s*([0-9]+\.[0-9]+\.[0-9]+)\+([0-9]+)/)
     
-    UI.success("Version code incremented to #{new_version}")
+    unless version_match
+      UI.user_error!("Could not parse version from pubspec.yaml")
+    end
+    
+    version_name = version_match[1]
+    build_number = version_match[2]
+    
+    UI.success("Current version: #{version_name} (#{build_number})")
+    UI.message("Android versionName: #{version_name}")
+    UI.message("Android versionCode: #{build_number}")
   end
 
   # =====================

@@ -203,6 +203,29 @@ version: ## Show Flutter and Dart versions
 	@echo "\n$(BLUE)Dart version:$(NC)"
 	@dart --version
 
+version-app: ## Show app version from pubspec.yaml
+	@./scripts/version.sh get
+
+version-bump-patch: ## Bump patch version (1.0.0 -> 1.0.1)
+	@./scripts/version.sh bump patch
+
+version-bump-minor: ## Bump minor version (1.0.0 -> 1.1.0)
+	@./scripts/version.sh bump minor
+
+version-bump-major: ## Bump major version (1.0.0 -> 2.0.0)
+	@./scripts/version.sh bump major
+
+version-bump-build: ## Bump build number (1.0.0+1 -> 1.0.0+2)
+	@./scripts/version.sh bump build
+
+version-set: ## Set version explicitly (usage: make version-set VERSION=1.2.3 BUILD=10)
+	@if [ -z "$(VERSION)" ]; then \
+		echo "$(RED)Error: VERSION is required$(NC)"; \
+		echo "Usage: make version-set VERSION=1.2.3 BUILD=10"; \
+		exit 1; \
+	fi
+	@./scripts/version.sh set $(VERSION) $(BUILD)
+
 ##@ CI/CD
 
 ci-analyze: format-check analyze ## Run CI analysis checks

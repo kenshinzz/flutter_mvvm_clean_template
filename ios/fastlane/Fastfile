@@ -5,6 +5,41 @@ default_platform(:ios)
 
 platform :ios do
   # =====================
+  # Helper Functions
+  # =====================
+  
+  # Sync version from pubspec.yaml to iOS Info.plist
+  def sync_version_from_pubspec
+    pubspec_path = File.join("..", "..", "pubspec.yaml")
+    unless File.exist?(pubspec_path)
+      UI.user_error!("pubspec.yaml not found at #{pubspec_path}")
+    end
+    
+    pubspec_content = File.read(pubspec_path)
+    version_match = pubspec_content.match(/version:\s*([0-9]+\.[0-9]+\.[0-9]+)\+([0-9]+)/)
+    
+    unless version_match
+      UI.user_error!("Could not parse version from pubspec.yaml")
+    end
+    
+    version_name = version_match[1]  # e.g., "1.0.0"
+    build_number = version_match[2]   # e.g., "1"
+    
+    # Update iOS version
+    increment_version_number(
+      version_number: version_name,
+      xcodeproj: "Runner.xcodeproj"
+    )
+    
+    increment_build_number(
+      build_number: build_number,
+      xcodeproj: "Runner.xcodeproj"
+    )
+    
+    UI.success("Synced version: #{version_name} (#{build_number})")
+  end
+
+  # =====================
   # Before All
   # =====================
   before_all do
@@ -85,10 +120,8 @@ platform :ios do
       git_branch: ENV["MATCH_GIT_BRANCH"] # Optional: branch name for this app
     )
 
-    # Increment build number
-    increment_build_number(
-      build_number: ENV["GITHUB_RUN_NUMBER"] || Time.now.strftime("%Y%m%d%H%M")
-    )
+    # Sync version from pubspec.yaml
+    sync_version_from_pubspec
 
     # Build the app
     build_app(

@@ -5,11 +5,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:speckit_flutter_template/core/di/providers.dart';
 import 'package:speckit_flutter_template/core/router/app_router.dart';
 import 'package:speckit_flutter_template/core/theme/app_theme.dart';
+import 'package:speckit_flutter_template/core/utils/version_info.dart';
 import 'package:speckit_flutter_template/l10n/app_localizations.dart';
 
 void main() async {
   // Ensure Flutter is initialized
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize version info
+  await VersionInfo.initialize();
 
   // Initialize SharedPreferences before running the app
   final sharedPreferences = await SharedPreferences.getInstance();
