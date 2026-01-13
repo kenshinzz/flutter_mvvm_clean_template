@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:speckit_flutter_template/core/di/providers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:speckit_flutter_template/core/di/providers.dart';
 
 import 'settings_viewmodel_test.mocks.dart';
 

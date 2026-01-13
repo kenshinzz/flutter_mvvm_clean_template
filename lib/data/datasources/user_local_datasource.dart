@@ -1,8 +1,8 @@
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:speckit_flutter_template/core/errors/exceptions.dart';
 import 'package:speckit_flutter_template/data/models/user_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 /// Local data source interface for user caching
 abstract class UserLocalDataSource {

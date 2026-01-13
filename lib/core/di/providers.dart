@@ -7,6 +7,7 @@ library;
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:speckit_flutter_template/core/network/api_client.dart';
 import 'package:speckit_flutter_template/core/network/network_info.dart';
 import 'package:speckit_flutter_template/core/storage/auth_storage.dart';
@@ -18,7 +19,6 @@ import 'package:speckit_flutter_template/domain/repositories/user_repository.dar
 import 'package:speckit_flutter_template/domain/usecases/get_current_user_usecase.dart';
 import 'package:speckit_flutter_template/domain/usecases/get_users_usecase.dart';
 import 'package:speckit_flutter_template/domain/usecases/update_user_usecase.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // Re-export ViewModels
 export 'package:speckit_flutter_template/presentation/viewmodels/settings_viewmodel.dart'
