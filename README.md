@@ -99,6 +99,27 @@ lib/
 
 ### Installation
 
+#### Using Makefile (Recommended)
+
+```bash
+# Clone the repository
+git clone https://github.com/YOUR_USERNAME/flutter_mvvm_clean_template.git
+cd flutter_mvvm_clean_template
+
+# Complete setup (dependencies + iOS pods)
+make setup
+
+# Or setup individually
+make install          # Install Flutter dependencies
+make setup-ios        # Setup iOS pods
+make setup-android    # Setup Android dependencies
+
+# View all available commands
+make help
+```
+
+#### Manual Installation
+
 ```bash
 # Clone the repository
 git clone https://github.com/YOUR_USERNAME/flutter_mvvm_clean_template.git
@@ -116,6 +137,22 @@ dart run build_runner build --delete-conflicting-outputs
 
 ### Running the App
 
+#### Using Makefile
+
+```bash
+# Development (default)
+make run
+make run-dev
+
+# Staging
+make run-staging
+
+# Production
+make run-prod
+```
+
+#### Manual Commands
+
 ```bash
 # Development
 flutter run -t lib/main_dev.dart
@@ -128,6 +165,51 @@ flutter run -t lib/main_prod.dart --release
 
 # Default (same as dev)
 flutter run
+```
+
+### Common Commands
+
+The project includes a `Makefile` with convenient commands:
+
+```bash
+# Setup
+make setup              # Complete setup
+make install            # Install dependencies
+
+# Build
+make build-dev          # Build development
+make build-staging      # Build staging
+make build-prod        # Build production
+make build-android-bundle  # Build Android App Bundle
+
+# Run
+make run                # Run development (default)
+make run-staging        # Run staging
+make run-prod           # Run production
+
+# Test
+make test               # Run all tests
+make test-unit          # Unit tests only
+make test-golden        # Golden/snapshot tests
+make test-coverage      # Tests with coverage
+
+# Code Quality
+make format             # Format code
+make analyze            # Analyze code
+make lint               # Run all lint checks
+make fix                # Auto-fix issues
+
+# Fastlane
+make fastlane-ios-beta      # Deploy iOS to TestFlight
+make fastlane-ios-release   # Deploy iOS to App Store
+make fastlane-android-beta  # Deploy Android to Internal Testing
+
+# Clean
+make clean              # Clean build files
+make clean-all          # Clean everything
+
+# View all commands
+make help
 ```
 
 ## 💉 Dependency Injection with Riverpod
@@ -541,7 +623,17 @@ class ProductPage extends ConsumerWidget {
 
 ## 🧪 Testing
 
-### Run Tests
+### Using Makefile
+
+```bash
+make test                # Run all tests
+make test-unit           # Unit tests only (exclude golden)
+make test-golden         # Golden/snapshot tests only
+make test-golden-update  # Update golden test files
+make test-coverage       # Run tests with coverage
+```
+
+### Manual Commands
 
 ```bash
 # All tests (excluding golden)
@@ -555,6 +647,9 @@ flutter test test/core/network/api_client_test.dart
 
 # Golden tests only
 flutter test --tags=golden
+
+# Update golden files
+flutter test --tags=golden --update-goldens
 
 # Update golden images
 flutter test --tags=golden --update-goldens
@@ -608,7 +703,24 @@ For detailed setup, see [CI_CD_SETUP.md](CI_CD_SETUP.md).
 
 ## 📱 Build Commands
 
-### Android
+### Using Makefile
+
+```bash
+# Android
+make build-android-dev      # Development APK
+make build-android-staging  # Staging APK
+make build-android-prod     # Production APK
+make build-android-bundle   # App Bundle for Play Store
+
+# iOS
+make build-ios-dev         # Development (no codesign)
+make build-ios-staging      # Staging (no codesign)
+make build-ios-prod         # Production (no codesign)
+```
+
+### Manual Commands
+
+#### Android
 
 ```bash
 # Debug APK
@@ -677,6 +789,7 @@ flutter build ios --release
 
 | File | Purpose |
 |------|---------|
+| `Makefile` | Centralized commands for development, build, test, and deployment |
 | `analysis_options.yaml` | Dart analyzer & lint rules |
 | `l10n.yaml` | Localization configuration |
 | `dart_test.yaml` | Test tag configuration |
